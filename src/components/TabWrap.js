@@ -1,11 +1,10 @@
 import { Paper, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext } from 'react';
 import { GlobalContext } from '../contexts/GlobalContext';
 
 function TabWrap({title, children}) {
   const { theme } = useContext(GlobalContext);
-  const [isOpenForma, setIsOpenForma] = useState(false);
 
   return (
     

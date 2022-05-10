@@ -41,7 +41,7 @@ function ListItemSt({ vrijeme, vrijemeIcon, nazivTure, children }) {
             {vrijemeIcon}
           </Typography>
         </ListItemIcon>
-        <Stack justifyContent="center" alignItems="flex-start" spacing={0} style={{ paddingBottom: '5px' }}>
+        <Stack justifyContent="center" alignItems="flex-start" spacing={0} style={{ paddingBottom: '5px', marginLeft: '5px' }}>
           <Typography variant="subtitle1" gutterBottom component="div" margin={0}>
             {nazivTure}
           </Typography>

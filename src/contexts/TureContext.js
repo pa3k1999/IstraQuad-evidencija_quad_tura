@@ -1,27 +1,29 @@
 import React, { createContext, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, where } from 'firebase/firestore';
 import db from '../firebase.config';
 
 export const TureContext = createContext();
 
+const getData = async () => {
+  
+  const first = query(collection(db, "ture"), orderBy("vrijemePocetka"), limit(1));
+  const documentSnapshotsFirst = await getDocs(first);
+  const firstDate = documentSnapshotsFirst.docs[0].data().vrijemePocetka.toDate();
+  // const date = `${firstDate.getDate()}-${firstDate.getMonth()}-${firstDate.getFullYear()}`;
+  const dateFilter = new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate()+1, 23)
+  console.log(firstDate)
+  let data = [];
+  const second = query(collection(db, "ture"), where("vrijemePocetka", ">=", firstDate),  where("vrijemePocetka", "<=", dateFilter));
+  const documentSnapshotsSecond = await getDocs(second);
+  documentSnapshotsSecond.forEach((doc) => {
+    data.push({ id: doc.id, ...doc.data() });
+  });
+  console.log(data);
+};
+
 export function TureProvider({ children }) {
 
-  const [ture, setTure] = useState('lol');
 
-  const getData = async (dbPath) => {
-    let data = [];
 
-    const querySnapshot = await getDocs(collection(db, dbPath));
-
-    querySnapshot.forEach((doc) => {
-      data.push({id: doc.id, ...doc.data()});
-    });
-    return await data;
-  };
-
-  (async () => {
-    console.log(await getData('quadovi'));
-  })();
-
-  return <TureContext.Provider value={{ ture }}>{children}</TureContext.Provider>;
+  return <TureContext.Provider value={{ getData }}>{children}</TureContext.Provider>;
 }

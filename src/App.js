@@ -10,11 +10,13 @@ import VrsteQuadovaPage from './VrsteQuadovaPage';
 import { QuadoviProvider } from './contexts/QuadoviContext';
 import NavBar from './components/NavBar';
 import { Route, Routes } from 'react-router-dom';
+import { TureProvider } from './contexts/TureContext';
+import ZavrseneTurePage from './ZavrseneTurePage';
+import TureListaTabs from './components/tureLista/TureListaTabs'
+import LogInPage from './LogInPage';
 
 function App() {
 const {theme} = useContext(GlobalContext)
-
-console.log(theme.palette.secondary.main)
 
   return (
       <ThemeProvider theme={theme}>
@@ -25,6 +27,8 @@ console.log(theme.palette.secondary.main)
               <Route exact path="/" element={<p> pipi pupu </p>}/>
               <Route exact path="/vrste-quadova" element={<VrsteQuadovaProvider><VrsteQuadovaPage/></VrsteQuadovaProvider>}/>
               <Route exact path="/quadovi" element={<QuadoviProvider><QuadoviPage/></QuadoviProvider>}/>
+              <Route exact path="/zavrsene-ture" element={<TureProvider><TureListaTabs/><ZavrseneTurePage/></TureProvider>}/>
+              <Route exact path="/prijava" element={<LogInPage/>}/>
             </Routes> 
           </Box>
         </Paper>

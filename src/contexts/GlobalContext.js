@@ -1,7 +1,7 @@
 import { unstable_createMuiStrictModeTheme } from '@mui/material';
 import { amber, red, yellow } from '@mui/material/colors';
 import React, { createContext, useEffect, useState } from 'react';
-import { addDoc, doc, collection, getDocs, updateDoc, deleteDoc, setDoc } from 'firebase/firestore';
+import { addDoc, doc, collection, getDocs, updateDoc, deleteDoc, setDoc, where, query, getDoc } from 'firebase/firestore';
 import db from '../firebase.config';
 
 export const GlobalContext = createContext();
@@ -65,6 +65,16 @@ const handleDeleteeDataF = async (vrsta, id, state, setState) => {
   }
 };
 
+const getUserEmail = async (korisnickoIme) => {
+  try{
+    const first = query(collection(db, "vodici"), where("korisnickoIme", "==", korisnickoIme));
+    const documentSnapshotsFirst = await getDocs(first);
+    return documentSnapshotsFirst.docs[0].data().eMail
+  }catch (e) {
+    return 'error'
+  }
+};
+
 export function GlobalProvider({ children }) {
   const [vrsteQuadova, setVrsteQuadova] = useState([]);
   const [quadovi, setQuadovi] = useState([]);
@@ -72,10 +82,12 @@ export function GlobalProvider({ children }) {
   useEffect(() => {
     getData('vrsteQuadova', setVrsteQuadova)
     getData('quadovi', setQuadovi);
+    
   }, []);
 
-  console.log(quadovi)
-  console.log(vrsteQuadova)
+    
+  // console.log(quadovi)
+  // console.log(vrsteQuadova)
 
   const handleNewData = async(data, vrsta, id) => {
     if (vrsta === 'vrsteQuadova')
@@ -98,5 +110,5 @@ export function GlobalProvider({ children }) {
       await handleDeleteeDataF(vrsta, id, quadovi, setQuadovi)
   };
 
-  return <GlobalContext.Provider value={{ theme, vrsteQuadova, handleNewData, handleUpdateData, handleDeleteeData, quadovi}}>{children}</GlobalContext.Provider>;
+  return <GlobalContext.Provider value={{ theme, vrsteQuadova, handleNewData, handleUpdateData, handleDeleteeData, quadovi, getUserEmail}}>{children}</GlobalContext.Provider>;
 }
