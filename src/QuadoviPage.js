@@ -9,11 +9,12 @@ import { GlobalContext } from './contexts/GlobalContext';
 import { QuadoviContext } from './contexts/QuadoviContext';
 
 function QuadoviPage() {
+
+  const { selectedQuad, vrsteQuadova, quadovi, handleDeleteeDataQuad } = useContext(QuadoviContext);
+
   const [isOpenForma, setIsOpenForma] = useState(false);
   const [isConfirmDOpen, setIsConfirmDOpen] = useState(false);
-  const { vrsteQuadova, quadovi } = useContext(GlobalContext);
-  const { selectedQuad } = useContext(QuadoviContext);
-
+  
   return (
     <TabWrap title="Quadovi">
       {vrsteQuadova.map((vq) => {
@@ -42,7 +43,7 @@ function QuadoviPage() {
         isOpen={isConfirmDOpen}
         handleClose={() => setIsConfirmDOpen(false)}
         dataId={selectedQuad.id}
-        dataTipe="quadovi"
+        handleDeleteeData={handleDeleteeDataQuad}
       />
       <NoviQuadPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
     </TabWrap>

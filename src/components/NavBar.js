@@ -23,6 +23,8 @@ import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GlobalContext } from '../contexts/GlobalContext.js';
+import { getAuth } from 'firebase/auth';
+import adminsUIDs from '../adminsUIDs'
 
 const StyledSwipeableDrawer = styled((props) => <SwipeableDrawer {...props} />)(({ theme }) => ({
   '& div.MuiDrawer-paperAnchorLeft': {
@@ -41,7 +43,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 function NavBar() {
-  const { theme } = useContext(GlobalContext);
+  const { theme, auth } = useContext(GlobalContext);
 
   const [isSBOpen, setIsSBOpen] = useState(false);
   const navigate = useNavigate();
@@ -49,6 +51,11 @@ function NavBar() {
     navigate(location);
     setIsSBOpen(false);
   };
+
+  const handleOdjava = async() => {
+    await auth.signOut()
+    navigate('/');
+  }
 
   return (
     <>
@@ -68,7 +75,7 @@ function NavBar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Istra Quad
             </Typography>
-            <Button color="inherit" onClick={() => navigate('/prijava')}>Login</Button>
+           {auth.currentUser ? <Button color="inherit" onClick={handleOdjava}>Odjavite se</Button> : <></>}
           </Toolbar>
         </AppBar>
       </Box>
@@ -94,7 +101,9 @@ function NavBar() {
           </DrawerHeader>
           <Divider />
           <List>
-            <ListItem disablePadding>
+          {auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? 
+          <>
+            <ListItem disablePadding> 
               <ListItemButton onClick={() => handleNavigate(`/vrste-quadova`)}>
                 <ListItemIcon>
                   <FormatListBulletedIcon sx={{ color: 'primary.contrastText' }} />
@@ -110,6 +119,8 @@ function NavBar() {
                 <ListItemText primary="Quadovi" />
               </ListItemButton>
             </ListItem>
+            </> :
+            <></>}
           </List>
         </Box>
       </StyledSwipeableDrawer>

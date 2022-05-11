@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import {
   Alert,
   Button,
   CircularProgress,
-  FormControl,
   IconButton,
   InputAdornment,
   Paper,
@@ -33,14 +32,13 @@ const StyledLozinkaTextValidator = styled((props) => (
 }));
 
 const errors = {
-  'auth/invalid-email': 'Korisnicko ime ili lozinka je pogresna',
-  'auth/wrong-password': 'Korisnicko ime ili lozinka je pogresna'
+  'auth/invalid-email': 'Korisnicko ime ili lozinka je pogresna!',
+  'auth/wrong-password': 'Korisnicko ime ili lozinka je pogresna!'
 }
 
 export default function LogInPage() {
-  const { theme, getUserEmail } = useContext(GlobalContext);
+  const { theme, getUserEmail, isLogiran, auth } = useContext(GlobalContext);
 
-  const auth = getAuth();
   const [korisnickoIme, changeKorisnickoIme, resetKorisnickoIme, setKorisnickoIme] = useInputState('');
   const [lozinka, changeLozinka, resetLozinka, setLozinka] = useInputState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -48,14 +46,20 @@ export default function LogInPage() {
   const [isSnackBOpen, setIsSnackBOpen] = useState(false);
   const [errorCode, setErrorCode] = useState('');
   const navigate = useNavigate();
+  const [isLoadingPage, setIsLoadingPage] = useState(true);
   
-  const handleOdustani = async() => {
-    
-     await auth.signOut()
-    
-  };
+  useEffect(() => {
+    if(isLogiran){
+      navigate('/')
+    } else {
+      setIsLoadingPage(false);
+    }
+  }, [])
 
-  console.log(auth.currentUser);
+  const handleOdustani = async() => {
+     await auth.signOut()
+     navigate('/')
+  };
 
   const handleLogIn = async() => {
     setIsLoading(true);
@@ -63,7 +67,6 @@ export default function LogInPage() {
     console.log(email);
     signInWithEmailAndPassword(auth, email, lozinka)
       .then((userCredential) => {
-        const user = userCredential.user;
         navigate('/');
       })
       .catch((error) => {
@@ -91,12 +94,8 @@ export default function LogInPage() {
     });
   }, [korisnickoIme, lozinka]);
 
-  //TODO: fix this shit
-// if(auth.currentUser){
-//   navigate('/')
-// }
-
   return (
+    isLoadingPage ? <></> :
     <>
     <Paper elevation={4} style={{ maxWidth: '400px', margin: 'auto', borderRadius: '15px', overflow: 'hidden' }}>
       <Box
@@ -162,6 +161,6 @@ export default function LogInPage() {
           {errors[errorCode]}
         </Alert>
       </Snackbar>
-    </>
+    </> 
   );
 }

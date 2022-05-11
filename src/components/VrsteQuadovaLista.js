@@ -8,7 +8,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmBrisanje from './popupProzori/ConfirmBrisanje';
 import { VrsteQuadovaContext } from '../contexts/VrsteQuadovaContext';
-import { GlobalContext } from '../contexts/GlobalContext';
 
 const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, vrstaQuada, handleOpenDelete }) {
 
@@ -59,8 +58,7 @@ const handleDelete = () => {
 });
 
 function VrsteQuadovaLista({ handleSetIsOpenForma }) {
-  const { vrsteQuadova } = useContext(GlobalContext);
-  const { selectedVrstaQuada } = useContext(VrsteQuadovaContext);
+  const { selectedVrstaQuada, handleDeleteeDataVQuada, vrsteQuadova } = useContext(VrsteQuadovaContext);
   const [isConfirmDOpen, setIsConfirmDOpen] = useState(false);
   return (
     <>
@@ -69,7 +67,7 @@ function VrsteQuadovaLista({ handleSetIsOpenForma }) {
           <ListItemSt vrstaQuada={VQ} handleSetIsOpenForma={handleSetIsOpenForma} handleOpenDelete={setIsConfirmDOpen} key={VQ.id}/>
       ))}
     </List>
-    <ConfirmBrisanje isOpen={isConfirmDOpen} handleClose={() => setIsConfirmDOpen(false)} dataId={selectedVrstaQuada.id} dataTipe='vrsteQuadova'/>
+    <ConfirmBrisanje isOpen={isConfirmDOpen} handleClose={() => setIsConfirmDOpen(false)} dataId={selectedVrstaQuada.id} handleDeleteeData={handleDeleteeDataVQuada}/>
     </>
   );
 }

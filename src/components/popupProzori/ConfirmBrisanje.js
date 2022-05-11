@@ -6,13 +6,13 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ConfirmBrisanje({ isOpen, handleClose, dataId, dataTipe }) {
-  const { handleDeleteeData, theme } = useContext(GlobalContext);
+function ConfirmBrisanje({ isOpen, handleClose, dataId, handleDeleteeData }) {
+  const { theme } = useContext(GlobalContext);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async() => {
     setIsLoading(true);
-    handleDeleteeData(dataTipe, dataId).then(setTimeout(() => {
+    handleDeleteeData(dataId).then(setTimeout(() => {
       handleClose();
       setIsLoading(false);
     }, 500));

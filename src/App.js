@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react';
 import './App.css';
 import { GlobalContext } from './contexts/GlobalContext';
-import { memo, useContext } from 'react';
+import { memo, useContext} from 'react';
 import { Paper } from '@mui/material';
 import { Box } from '@mui/system';
 import QuadoviPage from './QuadoviPage';
@@ -9,19 +9,16 @@ import { VrsteQuadovaProvider } from './contexts/VrsteQuadovaContext';
 import VrsteQuadovaPage from './VrsteQuadovaPage';
 import { QuadoviProvider } from './contexts/QuadoviContext';
 import NavBar from './components/NavBar';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import { TureProvider } from './contexts/TureContext';
 import ZavrseneTurePage from './ZavrseneTurePage';
 import TureListaTabs from './components/tureLista/TureListaTabs';
 import LogInPage from './LogInPage';
-import { getAuth } from 'firebase/auth';
 import ErrorPage from './ErrorPage';
+import adminsUIDs from './adminsUIDs';
 
 function App() {
-  const { theme } = useContext(GlobalContext);
-
-  const auth = getAuth();
-  const navigate = useNavigate();
+  const { theme, auth} = useContext(GlobalContext);
 
   return (
     <ThemeProvider theme={theme}>
@@ -34,22 +31,26 @@ function App() {
               exact
               path="/vrste-quadova"
               element={
-                auth.currentUser ? 
-                <VrsteQuadovaProvider>
-                  <VrsteQuadovaPage />
-                </VrsteQuadovaProvider> :
-                <ErrorPage/>
+                auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                  <VrsteQuadovaProvider>
+                    <VrsteQuadovaPage />
+                  </VrsteQuadovaProvider>
+                ) : (
+                  <ErrorPage />
+                )
               }
             />
             <Route
               exact
               path="/quadovi"
               element={
-                auth.currentUser ? 
-                <QuadoviProvider>
-                  <QuadoviPage />
-                </QuadoviProvider> :
-                <ErrorPage/>
+                auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                  <QuadoviProvider>
+                    <QuadoviPage />
+                  </QuadoviProvider>
+                ) : (
+                  <ErrorPage />
+                )
               }
             />
             <Route

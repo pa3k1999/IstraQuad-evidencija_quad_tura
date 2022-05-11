@@ -24,8 +24,8 @@ const StyledMenuItem = styled((props) => <MenuItem {...props} />)(({ theme }) =>
 }));
 
 function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
-  const { handleNewData, theme, quadovi, vrsteQuadova, handleUpdateData } = useContext(GlobalContext);
-  const { selectedQuad } = useContext(QuadoviContext);
+  const { theme } = useContext(GlobalContext);
+  const { selectedQuad, quadovi, vrsteQuadova, handleNewDataQuad, handleUpdateDataQuad } = useContext(QuadoviContext);
 
   const [iId, handleChangeIId, resetIId, setIId] = useInputState('');
   const [iBrSasije, handleChangeIBrSasije, resetIBrSasije, setIBrSasije] = useInputState('');
@@ -57,7 +57,7 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   const handleDodaj = async () => {
     const quad = { brSasije: iBrSasije, vrstaQuadaId: vrstaQuada };
     setIsLoading(true);
-    (isUpd ? handleUpdateData(quad, 'quadovi', selectedQuad.id) : handleNewData(quad, 'quadovi', iId)).then(
+    (isUpd ? handleUpdateDataQuad(quad, selectedQuad.id) : handleNewDataQuad(quad, iId)).then(
       () => {
         handleClose();
         setIsLoading(false);
@@ -80,6 +80,8 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
       return quadovi.every(q => q.id.toLowerCase() !== value.toLowerCase() || selectedQuad.id.toLowerCase() === value.toLowerCase());
     });
   }, [iId, iBrSasije, vrstaQuada]);
+
+//TODO: makni iid
 
   return (
     <>

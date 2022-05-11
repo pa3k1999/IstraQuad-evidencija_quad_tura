@@ -36,8 +36,8 @@ const StyledPopover = styled((props) => (
 
 function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
 
-  const { handleNewData, theme, vrsteQuadova, handleUpdateData } = useContext(GlobalContext);
-  const { selectedVrstaQuada } = useContext(VrsteQuadovaContext);
+  const { theme } = useContext(GlobalContext);
+  const { selectedVrstaQuada, vrsteQuadova, handleNewDataVQuada, handleUpdateDataVQuada } = useContext(VrsteQuadovaContext);
   
   const [iNaziv, handleChangeINaziv, resetINaziv, setINaziv] = useInputState('');
   const [iObujam, handleChangeIObujam, resetIObujam, setIObujam] = useInputState('');
@@ -59,7 +59,7 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
   const handleDodaj = async () => {
     const vrstaQuada = { naziv: iNaziv, obujamMotora: iObujam, boja: color};
     setIsLoading(true);
-    (isUpd ? handleUpdateData(vrstaQuada, 'vrsteQuadova', selectedVrstaQuada.id) : handleNewData(vrstaQuada, 'vrsteQuadova', '')).then(() => {
+    (isUpd ? handleUpdateDataVQuada(vrstaQuada, selectedVrstaQuada.id) : handleNewDataVQuada(vrstaQuada, '')).then(() => {
       handleClose();
       setIsLoading(false);
     });
