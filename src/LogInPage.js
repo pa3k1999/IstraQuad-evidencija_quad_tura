@@ -33,7 +33,8 @@ const StyledLozinkaTextValidator = styled((props) => (
 }));
 
 const errors = {
-  'auth/invalid-email': 'Korisnicko ime ili lozinka je pogresna'
+  'auth/invalid-email': 'Korisnicko ime ili lozinka je pogresna',
+  'auth/wrong-password': 'Korisnicko ime ili lozinka je pogresna'
 }
 
 export default function LogInPage() {
@@ -47,12 +48,14 @@ export default function LogInPage() {
   const [isSnackBOpen, setIsSnackBOpen] = useState(false);
   const [errorCode, setErrorCode] = useState('');
   const navigate = useNavigate();
-
+  
   const handleOdustani = async() => {
     
-    // await auth.signOut()
+     await auth.signOut()
     
   };
+
+  console.log(auth.currentUser);
 
   const handleLogIn = async() => {
     setIsLoading(true);
@@ -61,10 +64,10 @@ export default function LogInPage() {
     signInWithEmailAndPassword(auth, email, lozinka)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log(auth.currentUser);
         navigate('/');
       })
       .catch((error) => {
+        console.log(error.code);
         setErrorCode(error.code);
         setIsSnackBOpen(true);
         setIsLoading(false);
@@ -87,6 +90,11 @@ export default function LogInPage() {
       return true;
     });
   }, [korisnickoIme, lozinka]);
+
+  //TODO: fix this shit
+// if(auth.currentUser){
+//   navigate('/')
+// }
 
   return (
     <>

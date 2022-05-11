@@ -68,7 +68,7 @@ function NavBar() {
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               Istra Quad
             </Typography>
-            <Button color="inherit">Login</Button>
+            <Button color="inherit" onClick={() => navigate('/prijava')}>Login</Button>
           </Toolbar>
         </AppBar>
       </Box>
