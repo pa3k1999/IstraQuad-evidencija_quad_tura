@@ -57,9 +57,9 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
   }
 
   const handleDodaj = async () => {
-    const vrstaQuada = { naziv: iNaziv, obujamMotora: iObujam, boja: color};
+    const newVrstaQuada = { naziv: iNaziv, obujamMotora: iObujam, boja: color};
     setIsLoading(true);
-    (isUpd ? handleUpdateDataVQuada(vrstaQuada, selectedVrstaQuada.id) : handleNewDataVQuada(vrstaQuada, '')).then(() => {
+    (isUpd ? handleUpdateDataVQuada(newVrstaQuada, selectedVrstaQuada.id) : handleNewDataVQuada(newVrstaQuada, '')).then(() => {
       handleClose();
       setIsLoading(false);
     });

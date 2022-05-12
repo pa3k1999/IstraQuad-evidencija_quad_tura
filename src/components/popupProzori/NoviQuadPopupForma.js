@@ -55,9 +55,9 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   };
 
   const handleDodaj = async () => {
-    const quad = { brSasije: iBrSasije, vrstaQuadaId: vrstaQuada };
+    const newQuad = { brSasije: iBrSasije, vrstaQuadaId: vrstaQuada };
     setIsLoading(true);
-    (isUpd ? handleUpdateDataQuad(quad, selectedQuad.id) : handleNewDataQuad(quad, iId)).then(
+    (isUpd ? handleUpdateDataQuad(newQuad, selectedQuad.id) : handleNewDataQuad(newQuad, iId)).then(
       () => {
         handleClose();
         setIsLoading(false);

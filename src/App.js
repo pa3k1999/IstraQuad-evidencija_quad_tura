@@ -9,13 +9,15 @@ import { VrsteQuadovaProvider } from './contexts/VrsteQuadovaContext';
 import VrsteQuadovaPage from './VrsteQuadovaPage';
 import { QuadoviProvider } from './contexts/QuadoviContext';
 import NavBar from './components/NavBar';
-import { Route, Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { TureProvider } from './contexts/TureContext';
 import ZavrseneTurePage from './ZavrseneTurePage';
 import TureListaTabs from './components/tureLista/TureListaTabs';
 import LogInPage from './LogInPage';
 import ErrorPage from './ErrorPage';
 import adminsUIDs from './adminsUIDs';
+import VodiciPage from './VodiciPage';
+import { VodiciProvider } from './contexts/VodiciContext';
 
 function App() {
   const { theme, auth} = useContext(GlobalContext);
@@ -61,6 +63,15 @@ function App() {
                   <TureListaTabs />
                   <ZavrseneTurePage />
                 </TureProvider>
+              }
+            />
+            <Route
+              exact
+              path="/vodici"
+              element={
+                <VodiciProvider>
+                  <VodiciPage/>
+                </VodiciProvider>
               }
             />
             <Route exact path="/prijava" element={<LogInPage />} />

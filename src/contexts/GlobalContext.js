@@ -40,7 +40,6 @@ const getUserEmail = async (korisnickoIme) => {
   }
 };
 
-
 export function GlobalProvider({ children }) {
   const auth = getAuth();
   const [isLogiran, setIsLogiran] = useState(false);
@@ -49,6 +48,7 @@ export function GlobalProvider({ children }) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setIsLogiran(true);
+      console.log(user)
     } else {
       setIsLogiran(false);
     }
@@ -56,8 +56,6 @@ export function GlobalProvider({ children }) {
   });
 
   console.log(isLogiran);
-
- 
 
   return (
     <GlobalContext.Provider

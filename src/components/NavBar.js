@@ -23,6 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GlobalContext } from '../contexts/GlobalContext.js';
+import GroupIcon from '@mui/icons-material/Group';
 import { getAuth } from 'firebase/auth';
 import adminsUIDs from '../adminsUIDs'
 
@@ -117,6 +118,14 @@ function NavBar() {
                   <SvgIcon sx={{ color: 'primary.contrastText' }}>{atvIcon}</SvgIcon>
                 </ListItemIcon>
                 <ListItemText primary="Quadovi" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleNavigate(`/vodici`)}>
+                <ListItemIcon>
+                  <GroupIcon sx={{ color: 'primary.contrastText' }}/>
+                </ListItemIcon>
+                <ListItemText primary="Vodic" />
               </ListItemButton>
             </ListItem>
             </> :

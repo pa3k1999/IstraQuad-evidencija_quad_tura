@@ -15,7 +15,7 @@ export function VrsteQuadovaProvider({ children }) {
   }, []);
 
   const handleNewDataVQuada = async (data, id) => {
-    await handleNewDataF(data, 'quadovi', id, vrsteQuadova, setVrsteQuadova);
+    await handleNewDataF(data, 'vrsteQuadova', id, vrsteQuadova, setVrsteQuadova);
   }
 
   const handleUpdateDataVQuada = async (data, id) => {
