@@ -15,6 +15,10 @@ function QuadoviPage() {
   const [isOpenForma, setIsOpenForma] = useState(false);
   const [isConfirmDOpen, setIsConfirmDOpen] = useState(false);
   
+//TODO: postavit dinamican prikaz podataka
+//      napravit popup za dodavanje tura
+//      napravit stranicu za prikaz detaljaS pojedinih tura 
+
   return (
     <TabWrap title="Quadovi">
       {vrsteQuadova.map((vq) => {
