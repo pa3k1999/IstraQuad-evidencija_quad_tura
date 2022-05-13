@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react'
+import TureListaTabs from './components/tureLista/TureListaTabs';
 import { TureContext } from './contexts/TureContext';
 
 function ZavrseneTurePage() {
@@ -9,10 +10,10 @@ function ZavrseneTurePage() {
     getData();
   },[])
 
- 
-
   return (
-    <div>ZavrseneTurePage</div>
+    <>    
+      <TureListaTabs />
+    </>
   )
 }
 

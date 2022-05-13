@@ -128,6 +128,14 @@ function NavBar() {
                 <ListItemText primary="Vodic" />
               </ListItemButton>
             </ListItem>
+            <ListItem disablePadding> 
+              <ListItemButton onClick={() => handleNavigate(`/zavrsene-ture`)}>
+                <ListItemIcon>
+                  <FormatListBulletedIcon sx={{ color: 'primary.contrastText' }} />
+                </ListItemIcon>
+                <ListItemText primary="zavrsene ture" />
+              </ListItemButton>
+            </ListItem>
             </> :
             <></>}
           </List>

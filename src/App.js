@@ -60,7 +60,6 @@ function App() {
               path="/zavrsene-ture"
               element={
                 <TureProvider>
-                  <TureListaTabs />
                   <ZavrseneTurePage />
                 </TureProvider>
               }
