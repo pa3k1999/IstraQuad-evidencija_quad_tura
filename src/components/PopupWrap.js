@@ -1,7 +1,25 @@
-import { Dialog, DialogTitle, Slide, useMediaQuery } from '@mui/material';
+import styled from '@emotion/styled';
+import { Dialog, DialogContent, DialogTitle, Slide, useMediaQuery } from '@mui/material';
 import { Box } from '@mui/system';
-import React, { forwardRef, memo, useContext } from 'react'
+import React, { forwardRef, memo, useContext, useState } from 'react'
 import { GlobalContext } from '../contexts/GlobalContext';
+
+const StyledDialogContent = styled((props) => (
+  <DialogContent
+    {...props}
+  />
+))(() => ({
+  padding: 0,
+  paddingTop: '20px',
+  '&.MuiDialogContent-root': {
+    overflowY:'scroll',
+    msOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    '&::-webkit-scrollbar': {
+      display: 'none',
+    },
+  },
+}));
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -25,7 +43,7 @@ function PopupWrap({ handleClose, open, children, title }) {
       >
         {title}
       </DialogTitle>
-      <Box style={{ marginTop: '20px' }}>{children}</Box>
+      <StyledDialogContent dividers={true}>{children}</StyledDialogContent>
     </Dialog>
   );
 }

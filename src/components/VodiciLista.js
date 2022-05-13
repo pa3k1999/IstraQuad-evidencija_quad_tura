@@ -5,14 +5,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmBrisanje from './popupProzori/ConfirmBrisanje';
 
-const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, vodic, handleOpenDelete }) {
+const ListItemSt = memo(function ListItemSt({ vodic, handleOpenDelete }) {
 
   const { setSelectedVrstaQuada } = useContext(VodiciContext);
-  
-  const handleEdit = () => {
-    setSelectedVrstaQuada(vodic);
-    handleSetIsOpenForma(true);
-  }
   
   const handleDelete = () => {
     setSelectedVrstaQuada(vodic);
@@ -27,9 +22,6 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, vodic, handl
         disablePadding
         secondaryAction={
           <>
-            <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleEdit}>
-              <EditIcon />
-            </IconButton>
             <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleDelete}>
               <DeleteIcon />
             </IconButton>
@@ -55,14 +47,14 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, vodic, handl
     );
   });
 
-function VodiciLista({ handleSetIsOpenForma }) {
+function VodiciLista() {
   const { selectedVodici, handleDeleteeDataVodic, vodici } = useContext(VodiciContext);
   const [isConfirmDOpen, setIsConfirmDOpen] = useState(false);
   return (
     <>
     <List style={{ padding: '0' }} dense={true}>
       {vodici.map((v) => (
-          <ListItemSt vodic={v} handleSetIsOpenForma={handleSetIsOpenForma} handleOpenDelete={setIsConfirmDOpen} key={v.id}/>
+          <ListItemSt vodic={v} handleOpenDelete={setIsConfirmDOpen} key={v.id}/>
       ))}
     </List>
     <ConfirmBrisanje isOpen={isConfirmDOpen} handleClose={() => setIsConfirmDOpen(false)} dataId={selectedVodici.id} handleDeleteeData={handleDeleteeDataVodic}/>

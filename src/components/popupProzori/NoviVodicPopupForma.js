@@ -37,29 +37,23 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
   const [iLozinka, changeILozinka, resetILozinka, setILozinka] = useInputState('');
   const [iLozinkaC, changeILozinkaC, resetILozinkaC, setILozinkaC] = useInputState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isUpd, setIsUpd] = useState(true);
   const [isLozinkaPrikaz, setIsLozinkaPrikaz] = useState(false);
 
   const handleClose = () => {
     handleSetIsOpenForma(false);
-    setTimeout(() => {
-      setIsUpd(true);
-    }, 500);
   };
 
-//TODO: dodavanje korisnika s mailom i lozinkom i onda spremanje podataka u bazu
-
   const handleDodaj = async () => {
-    const newVodici = { eMail: '', ime: '', prezime: '', korisnickoIme: '' };
+    const newVodici = { eMail: iEmail, ime: iIme, prezime: iPrezime, korisnickoIme: iKorisnickoIme };
+    const userData = {eMail: iEmail, lozinka: iLozinkaC}
     setIsLoading(true);
-    handleNewDataVodic(newVodici, '').then(() => {
+    handleNewDataVodic(newVodici, userData).then(() => {
       handleClose();
       setIsLoading(false);
     });
   };
 
   const handleOpenNew = () => {
-    setIsUpd(false);
     handleSetIsOpenForma(true);
     resetIIme();
     resetIPrezime();
@@ -106,7 +100,7 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
 
   return (
     <>
-      <PopupWrap open={open} title={isUpd ? 'Azuriraj vrstu quada' : 'Dodaj vrstu quada'} handleClose={handleClose}>
+      <PopupWrap open={open} title='Dodaj vodica' handleClose={handleClose}>
         <ValidatorForm id="vodic" onSubmit={handleDodaj}>
           <Stack alignItems="center" spacing={1}>
             <TextValidator
@@ -185,7 +179,7 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
           </Stack>
         </ValidatorForm>
 
-        <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>
+        <Box style={{ textAlign: 'right', height: '40px', margin: '10px 10px 10px 10px' }}>
           {isLoading ? (
             <CircularProgress />
           ) : (
@@ -193,8 +187,8 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
               <Button variant="text" style={{ marginRight: '10px' }} onClick={handleClose}>
                 Odustani
               </Button>
-              <Button type="submit" form="vrstaQuada" variant="contained">
-                {isUpd ? 'Azuriraj' : 'Dodaj'}
+              <Button type="submit" form="vodic" variant="contained">
+                Dodaj
               </Button>
             </>
           )}
