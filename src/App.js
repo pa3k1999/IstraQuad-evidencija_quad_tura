@@ -12,7 +12,6 @@ import NavBar from './components/NavBar';
 import { Route, Routes } from 'react-router-dom';
 import { TureProvider } from './contexts/TureContext';
 import ZavrseneTurePage from './ZavrseneTurePage';
-import TureListaTabs from './components/tureLista/TureListaTabs';
 import LogInPage from './LogInPage';
 import ErrorPage from './ErrorPage';
 import adminsUIDs from './adminsUIDs';

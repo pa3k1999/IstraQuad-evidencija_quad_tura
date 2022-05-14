@@ -16,8 +16,8 @@ export function QuadoviProvider({ children }) {
     console.log('--Fetching data from firebase (vrsteQuadova i quadovi), then rerender--');
   }, []);
 
-  const handleNewDataQuad = async (data, id) => {
-    await handleNewDataF(data, 'quadovi', id, quadovi, setQuadovi);
+  const handleNewDataQuad = async (data) => {
+    await handleNewDataF(data, 'quadovi', '', quadovi, setQuadovi);
   }
 
   const handleUpdateDataQuad = async (data, id) => {

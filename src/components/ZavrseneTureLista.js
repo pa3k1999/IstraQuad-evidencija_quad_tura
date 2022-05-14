@@ -1,14 +1,14 @@
-import React, { memo } from 'react';
+import React, { memo, useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
 import Chip from '@mui/material/Chip';
 import { Stack, Typography } from '@mui/material';
 import { Box } from '@mui/system';
-import { blue, grey, orange } from '@mui/material/colors';
+import { TureContext } from '../contexts/TureContext';
+import PersonIcon from '@mui/icons-material/Person';
 
 function ChipSt({ avatar, num, color }) {
   return (
@@ -25,44 +25,67 @@ function ChipSt({ avatar, num, color }) {
   );
 }
 
-const ListItemSt = memo(function ListItemSt({ vrijeme, vrijemeIcon, nazivTure, children }) {
+const ListItemSt = memo(function ListItemSt({ zTura }) {
+  const { vrsteTura, vrsteQuadova, quadovi } = useContext(TureContext);
+
+  const vrP = zTura.vrijemePocetka.toDate();
+  const vrZ = zTura.vrijemeZavrsetka.toDate();
+
+  const vTureNaziv = vrsteTura.find((t) => t.id === zTura.vrstaTureId).naziv;
+
+  const quadoviUTuri = {};
+  zTura.quadovi.forEach((qT) => {
+    const quad = quadovi.find((q) => q.id === qT.idQuada);
+    quadoviUTuri[quad.vrstaQuadaId] = (quadoviUTuri[quad.vrstaQuadaId] || 0) + 1;
+  });
+
   return (
     <ListItem
       disablePadding
       secondaryAction={
         <Typography variant="subtitle2" gutterBottom component="div" margin={0}>
-          {vrijeme}
+          {`${('0' + vrP.getHours()).slice(-2)}:${('0' + vrP.getMinutes()).slice(-2)} - ${('0' + vrZ.getHours()).slice(
+            -2
+          )}:${('0' + vrZ.getMinutes()).slice(-2)}`}
         </Typography>
       }
     >
       <ListItemButton style={{ padding: '0', paddingLeft: '10px' }}>
         <ListItemIcon>
           <Typography variant="h5" gutterBottom component="div" margin={0}>
-            {vrijemeIcon}
+            {vTureNaziv}
           </Typography>
         </ListItemIcon>
-        <Stack justifyContent="center" alignItems="flex-start" spacing={0} style={{ paddingBottom: '5px', marginLeft: '5px' }}>
+        <Stack
+          justifyContent="center"
+          alignItems="flex-start"
+          spacing={0}
+          style={{ paddingBottom: '5px', marginLeft: '5px' }}
+        >
           <Typography variant="subtitle1" gutterBottom component="div" margin={0}>
-            {nazivTure}
+            {zTura.naziv}
           </Typography>
-          <Box>{children}</Box>
+          <Box>
+            {Object.keys(quadoviUTuri).map(idVQ => {
+               const boja = vrsteQuadova.find(q => q.id === idVQ).boja;
+              return <ChipSt key={idVQ} avatar=" " num={quadoviUTuri[idVQ]} color={boja} />;
+            })}
+
+            {zTura.brSuvozaca > 0 ? <ChipSt icon={<PersonIcon />} num={`+${zTura.brSuvozaca}`}  /> : ''}
+            
+          </Box>
         </Stack>
       </ListItemButton>
     </ListItem>
   );
-})
+});
 
-function ZavrseneTureLista() {
+function ZavrseneTureLista({ zTure }) {
   return (
     <List style={{ padding: '0' }} dense={true}>
-      <ListItemSt vrijeme="13:45 - 14:45" vrijemeIcon="1H" nazivTure="Tura-0001">
-        <ChipSt avatar=" " num="2+1" color={orange[500]} />
-        <ChipSt avatar=" " num="3" color={blue[500]} />
-      </ListItemSt>
-      <Divider />
-      <ListItemSt vrijeme="15:25 - 15:55" vrijemeIcon="30m" nazivTure="Tura-0002">
-        <ChipSt avatar=" " num="2" color={grey[500]} />
-      </ListItemSt>
+      {zTure.map((zT) => (
+        <ListItemSt key={zT.id} zTura={zT} />
+      ))}
     </List>
   );
 }

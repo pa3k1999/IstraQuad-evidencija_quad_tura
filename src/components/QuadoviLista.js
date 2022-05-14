@@ -43,7 +43,7 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handle
         <ListItemButton style={{ padding: '0', paddingLeft: '10px' }}>
           <Stack justifyContent="center" alignItems="flex-start" spacing={0} style={{ paddingBottom: '5px' }}>
             <Typography variant="subtitle1" gutterBottom component="div" margin={0}>
-              {quad.id}
+              {quad.naziv}
             </Typography>
             <Typography variant="caption" gutterBottom component="div" margin={0} >
               {quad.brSasije}

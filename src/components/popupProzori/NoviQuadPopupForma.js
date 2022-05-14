@@ -27,14 +27,14 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   const { theme } = useContext(GlobalContext);
   const { selectedQuad, quadovi, vrsteQuadova, handleNewDataQuad, handleUpdateDataQuad } = useContext(QuadoviContext);
 
-  const [iId, handleChangeIId, resetIId, setIId] = useInputState('');
+  const [iNaziv, handleChangeiNaziv, resetiNaziv, setiNaziv] = useInputState('');
   const [iBrSasije, handleChangeIBrSasije, resetIBrSasije, setIBrSasije] = useInputState('');
   const [vrstaQuada, setVrstaQuada] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isUpd, setIsUpd] = useState(true);
 
   useEffect(() => {
-    setIId(selectedQuad.id);
+    setiNaziv(selectedQuad.naziv);
     setIBrSasije(selectedQuad.brSasije);
     setVrstaQuada(selectedQuad.vrstaQuadaId)
   }, [selectedQuad]);
@@ -42,7 +42,7 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   const handleOpenNew = () => {
     setIsUpd(false);
     handleSetIsOpenForma(true);
-    resetIId('');
+    resetiNaziv('');
     resetIBrSasije('');
     setVrstaQuada('');
   };
@@ -55,9 +55,9 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   };
 
   const handleDodaj = async () => {
-    const newQuad = { brSasije: iBrSasije, vrstaQuadaId: vrstaQuada };
+    const newQuad = { naziv: iNaziv, brSasije: iBrSasije, vrstaQuadaId: vrstaQuada };
     setIsLoading(true);
-    (isUpd ? handleUpdateDataQuad(newQuad, selectedQuad.id) : handleNewDataQuad(newQuad, iId)).then(
+    (isUpd ? handleUpdateDataQuad(newQuad, selectedQuad.id) : handleNewDataQuad(newQuad)).then(
       () => {
         handleClose();
         setIsLoading(false);
@@ -79,9 +79,9 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
     ValidatorForm.addValidationRule('isNazivUsed', (value) => {
       return quadovi.every(q => q.id.toLowerCase() !== value.toLowerCase() || selectedQuad.id.toLowerCase() === value.toLowerCase());
     });
-  }, [iId, iBrSasije, vrstaQuada]);
+  }, [iNaziv, iBrSasije, vrstaQuada]);
 
-//TODO: makni iid
+//TODO: makni iNaziv
 
   return (
     <>
@@ -108,15 +108,15 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
               label="Naziv"
               color="secondary"
               style={{ width: '300px' }}
-              value={iId}
-              onChange={handleChangeIId}
+              value={iNaziv}
+              onChange={handleChangeiNaziv}
               validators={['isEmpty', 'isNazivUsed']}
               errorMessages={['Nesmije bit prazno', 'Naziv vec postoji']}
               helperText=" "
             />
             <TextValidator
               fullWidth={true}
-              label="Obujam motora"
+              label="Broj sasije"
               color="secondary"
               style={{ width: '300px' }}
               value={iBrSasije}
