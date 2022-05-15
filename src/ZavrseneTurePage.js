@@ -1,13 +1,22 @@
 import { Button, Typography } from '@mui/material';
-import React, { memo, useContext, useEffect } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import DropDownWrap from './components/DropDownWrap';
 import DetaljiZavrseneTurePopup from './components/popupProzori/DetaljiZavrseneTurePopup';
+import NovaZTuraPopupForma from './components/popupProzori/NovaZTuraPopupForma';
 import TabWrap from './components/TabWrap';
 import ZavrseneTureLista from './components/ZavrseneTureLista';
 import { TureContext } from './contexts/TureContext';
 
 function ZavrseneTurePage() {
   const { handleGetData, zTure } = useContext(TureContext);
+  const [ isDetaljiOpen, setIsDetaljiOpen ] = useState(false);
+
+  const handleOpenDetalji = () => {
+    setIsDetaljiOpen(true);
+  }
+  const handleCloseDetalji = () => {
+    setIsDetaljiOpen(false);
+  }
 
   useEffect(() => {
     handleGetData();
@@ -24,13 +33,14 @@ function ZavrseneTurePage() {
             key={datum}
             titleChildren={<Typography style={{ margin: '0', padding: '0' }}>{datum}</Typography>}
           >
-            <ZavrseneTureLista zTure={zT.tureData}/>
+            <ZavrseneTureLista zTure={zT.tureData} handleOpenDetalji={handleOpenDetalji}/>
           </DropDownWrap>
         );
       })}
 
       <Button onClick={handleGetData}>btn</Button>
-      <DetaljiZavrseneTurePopup/>
+      <NovaZTuraPopupForma/>
+      <DetaljiZavrseneTurePopup isOpen={isDetaljiOpen} handleClose={handleCloseDetalji}/>
     </TabWrap>
   );
 }

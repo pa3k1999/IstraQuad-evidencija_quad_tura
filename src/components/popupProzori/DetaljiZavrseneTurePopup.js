@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Dialog, DialogContent, DialogTitle, Divider, Grid, IconButton, Slide, Stack, Typography, useMediaQuery } from '@mui/material';
+import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Slide, Stack, Typography, useMediaQuery } from '@mui/material';
 import React, { forwardRef, useContext } from 'react';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { TureContext } from '../../contexts/TureContext';
@@ -23,15 +23,19 @@ const StyledDialogContent = styled((props) => (
   },
 }));
 
-//TODO: otvaranje i zatvaranje prozora
-//      sinkronizacija s podatcima iz baze
-
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function DetaljiZavrseneTurePopup({ handleClose }) {
-  const { vrsteTura, vrsteQuadova, quadovi } = useContext(TureContext);
+function DetaljiZavrseneTurePopup({ isOpen, handleClose }) {
+  const { vrsteTura, vodici, selectedZTura } = useContext(TureContext);
+
+  const zTuraVrataTure = vrsteTura.find(vT => vT.id === selectedZTura.vrstaTureId);
+  const zTuraVodic = vodici.find(v => v.id === selectedZTura.vodicId);
+
+  const vrP = selectedZTura.vrijemePocetka ? selectedZTura.vrijemePocetka.toDate() : new Date();
+  const vrZ = selectedZTura.vrijemeZavrsetka ? selectedZTura.vrijemeZavrsetka.toDate() : new Date();
+  const datum = `${vrP.getDate()}.${vrP.getMonth()+1}.${vrP.getFullYear()}.`;
 
   const { theme } = useContext(GlobalContext);
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -44,7 +48,7 @@ function DetaljiZavrseneTurePopup({ handleClose }) {
       fullWidth={true}
       maxWidth="sm"
       onClose={handleClose}
-      open={true}
+      open={isOpen}
     >
       <DialogTitle
         style={{ backgroundColor: `${theme.palette.primary.main}`, color: `${theme.palette.primary.contrastText}`, padding: '16px', paddingLeft: '8px' }}
@@ -57,13 +61,15 @@ function DetaljiZavrseneTurePopup({ handleClose }) {
            spacing={0}
            >
             <Typography variant="subtitle2" gutterBottom component="div" margin={0}>
-              1.4.2022.
+              {datum}
             </Typography>
             <Typography variant="h5" gutterBottom component="div" margin={0}>
-              1H
+              {zTuraVrataTure ? zTuraVrataTure.naziv : null}
             </Typography>
             <Typography variant="subtitle2" gutterBottom component="div" margin={0}>
-              10:00 - 11:00
+            {`${('0' + vrP.getHours()).slice(-2)}:${('0' + vrP.getMinutes()).slice(-2)} - ${('0' + vrZ.getHours()).slice(
+            -2
+          )}:${('0' + vrZ.getMinutes()).slice(-2)}`}
             </Typography>
           </Stack>
         </Box>
@@ -76,17 +82,17 @@ function DetaljiZavrseneTurePopup({ handleClose }) {
             style={{ marginLeft: '5px', height: '100%' }}
           >
             <Typography variant="h6" gutterBottom component="div" margin={0}>
-              test 123
+              {selectedZTura ? selectedZTura.naziv : null}
             </Typography>
             <Typography variant="subtitle2" gutterBottom component="div" margin={0}>
-              vodic
+              {zTuraVodic ? `${zTuraVodic.ime} ${zTuraVodic.prezime}` : null}
             </Typography>
           </Stack>
         </Box>
         </Stack>
         <IconButton
           aria-label="close"
-          onClick={''}
+          onClick={handleClose}
           sx={{
             position: 'absolute',
             right: 8,

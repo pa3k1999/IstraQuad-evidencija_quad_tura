@@ -24,7 +24,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GlobalContext } from '../contexts/GlobalContext.js';
 import GroupIcon from '@mui/icons-material/Group';
-import { getAuth } from 'firebase/auth';
 import adminsUIDs from '../adminsUIDs'
 
 const StyledSwipeableDrawer = styled((props) => <SwipeableDrawer {...props} />)(({ theme }) => ({

@@ -25,8 +25,8 @@ function ChipSt({ avatar, num, color }) {
   );
 }
 
-const ListItemSt = memo(function ListItemSt({ zTura }) {
-  const { vrsteTura, vrsteQuadova, quadovi } = useContext(TureContext);
+const ListItemSt = memo(function ListItemSt({ zTura, handleOpenDetalji }) {
+  const { vrsteTura, vrsteQuadova, quadovi, setSelectedZTura } = useContext(TureContext);
 
   const vrP = zTura.vrijemePocetka.toDate();
   const vrZ = zTura.vrijemeZavrsetka.toDate();
@@ -39,6 +39,11 @@ const ListItemSt = memo(function ListItemSt({ zTura }) {
     quadoviUTuri[quad.vrstaQuadaId] = (quadoviUTuri[quad.vrstaQuadaId] || 0) + 1;
   });
 
+  const handleOpenItem = () => {
+    setSelectedZTura(zTura);
+    handleOpenDetalji();
+  }
+
   return (
     <ListItem
       disablePadding
@@ -50,7 +55,7 @@ const ListItemSt = memo(function ListItemSt({ zTura }) {
         </Typography>
       }
     >
-      <ListItemButton style={{ padding: '0', paddingLeft: '10px' }}>
+      <ListItemButton style={{ padding: '0', paddingLeft: '10px' }} onClick={handleOpenItem}>
         <ListItemIcon>
           <Typography variant="h5" gutterBottom component="div" margin={0}>
             {vTureNaziv}
@@ -80,11 +85,11 @@ const ListItemSt = memo(function ListItemSt({ zTura }) {
   );
 });
 
-function ZavrseneTureLista({ zTure }) {
+function ZavrseneTureLista({ zTure, handleOpenDetalji }) {
   return (
     <List style={{ padding: '0' }} dense={true}>
       {zTure.map((zT) => (
-        <ListItemSt key={zT.id} zTura={zT} />
+        <ListItemSt key={zT.id} zTura={zT} handleOpenDetalji={handleOpenDetalji}/>
       ))}
     </List>
   );

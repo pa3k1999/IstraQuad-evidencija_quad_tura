@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { collection, doc, getDoc, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
 import db from '../firebase.config';
 import { getDataF } from './firestoreFunkcije';
 
@@ -69,6 +69,7 @@ const getData = async (data, setData, start, setStart) => {
 };
 
 export function TureProvider({ children }) {
+  const [selectedZTura, setSelectedZTura] = useState({id: '', brVozaca: '', brSuvozaca: '', naziv: '', vodicId: '', vrstaTureId: '', quadovi: [], napomene: []});
   const [zTure, setZTure] = useState([]);
   const [startFrom, setStartFrom] = useState();
   const [vrsteTura, setVrsteTura] = useState([]);
@@ -90,5 +91,5 @@ export function TureProvider({ children }) {
     getData(zTure, setZTure, startFrom, setStartFrom);
   };
 
-  return <TureContext.Provider value={{ handleGetData, zTure, vrsteTura, vodici, vrsteQuadova, quadovi }}>{children}</TureContext.Provider>;
+  return <TureContext.Provider value={{ handleGetData, zTure, vrsteTura, vodici, vrsteQuadova, quadovi, selectedZTura, setSelectedZTura }}>{children}</TureContext.Provider>;
 }
