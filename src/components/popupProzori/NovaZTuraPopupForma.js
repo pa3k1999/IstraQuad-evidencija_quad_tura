@@ -14,14 +14,22 @@ import { ValidatorForm } from 'react-material-ui-form-validator';
 import { SelectValidator } from 'react-material-ui-form-validator';
 import { TextValidator } from 'react-material-ui-form-validator';
 import {
+  Avatar,
+  Button,
+  Checkbox,
   Dialog,
   DialogContent,
   DialogTitle,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
   MenuItem,
   Slide,
   SvgIcon,
   TextField,
+  Typography,
   useMediaQuery,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -31,6 +39,8 @@ import useInputState from '../../hooks/useInputState';
 import { LocalizationProvider, MobileDatePicker, TimePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import hrLocale from 'date-fns/locale/hr';
+import { Box } from '@mui/system';
+import DropDownWrap from '../DropDownWrap.js';
 
 const StyledDialogContent = styled((props) => <DialogContent {...props} />)(() => ({
   padding: 0,
@@ -120,37 +130,56 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
- //TODO: zamjenit testfield sa validatorima
- //      napraviti useEfect za automatsko postavljanje datuma zavrsetka
- //      dodati buttone za dalje i odustani
-
 function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
   const { theme } = useContext(GlobalContext);
-  const { vrsteTura, vodici } = useContext(TureContext);
+  const { vrsteTura, vodici, quadovi, vrsteQuadova } = useContext(TureContext);
 
-  const [selectedVTure, setSelectedVTure] = useState('');
-  const [selectedVodic, setSelectedVodic] = useState('');
+  const [novaZTura, setNovaZTura] = useState({});
+  const [checked, setChecked] = useState({});
+  const [step, setStep] =useState(0);
+
+  const [selectedVTure, changeSelectedVTure, resetSelectedVTure, setSelectedVTure] = useInputState('');
+  const [selectedVodic, changeSelectedVodic, resetSelectedVodic, setSelectedVodic] = useInputState('');
   const [nazivTure, changeNazivTure, resetNazivTure, setNazivTure] = useInputState('');
-  const [datumTure, setDatumTure] = useState('');
-  const [vrijemePocetka, setVrijemePocetka] = useState('');
-  const [vrijemeZavrsetka, setVrijemeZavrsetka] = useState('');
-  const [value, setValue] = React.useState(new Date());
+  const [vrijemePocetka, setVrijemePocetka] = useState(new Date());
+  const [vrijemeZavrsetka, setVrijemeZavrsetka] = useState(new Date());
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleChangeDate = (newValue) => {
-    setValue(newValue);
-  };
+  useEffect(() => {
+    const temp = quadovi.map(q => [q.id, false]) 
+    setChecked(Object.fromEntries(temp));
+  }, [quadovi]);
+
+
+  const handleStep1 = () => {
+    setNovaZTura({naziv: nazivTure, vodicId: selectedVodic, vrijemePocetka: vrijemePocetka, vrijemeZavrsetka: vrijemeZavrsetka, vrstaTureId: selectedVTure});
+    setStep(1);
+  }
+
+  const handleStep2 = () => {
+    
+  }
+
+  const handleStep3 = () => {
+    
+  }
 
   const handleDodaj = () => {};
 
-  const handleChangeVTure = (event) => {
-    setSelectedVTure(event.target.value);
-  };
+  const handleToggleCheck = (id) => {
+    setChecked({...checked, [id]: !checked[id]});
+    console.log(checked)
+    console.log(id)
+  }
 
-  const handleChangeVodic = (event) => {
-    setSelectedVodic(event.target.value);
-  };
+  useEffect(() => {
+   if(selectedVTure !== ''){ 
+   setVrijemeZavrsetka(new Date(vrijemePocetka.getTime() + vrsteTura.find(vT => vT.id === selectedVTure).minute*60000));
+   } else {
+   setVrijemeZavrsetka(vrijemePocetka)
+  }
+  }, [vrijemePocetka, selectedVTure]);
 
   useEffect(() => {
     ValidatorForm.addValidationRule('isEmpty', (value) => {
@@ -159,12 +188,11 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
       }
       return true;
     });
-    console.log(nazivTure);
   }, [selectedVTure, selectedVodic, nazivTure]);
 
   const stepContent = [
     <>
-      <ValidatorForm id="zTura" onSubmit={handleDodaj}>
+      <ValidatorForm id="zTuraS1" onSubmit={handleStep1}>
         <Stack alignItems="center" spacing={1} marginTop="20px">
           <TextValidator
             label="Naziv ture"
@@ -181,7 +209,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
             id="vrstaTure-select"
             value={selectedVTure}
             label="Vrsta ture"
-            onChange={handleChangeVTure}
+            onChange={changeSelectedVTure}
             sx={{ m: 1, minWidth: '300px' }}
             helperText=" "
             validators={['isEmpty']}
@@ -198,7 +226,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
             id="vodic-select"
             value={selectedVodic}
             label="Vodic"
-            onChange={handleChangeVodic}
+            onChange={changeSelectedVodic}
             sx={{ m: 1, minWidth: '300px' }}
             helperText=" "
             validators={['isEmpty']}
@@ -215,23 +243,23 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
                 color="secondary"
                 label="Datum"
                 inputFormat="dd/MM/yyyy"
-                value={value}
-                onChange={handleChangeDate}
+                value={vrijemePocetka}
+                onChange={setVrijemePocetka}
                 renderInput={(params) => <TextField color="secondary" {...params} />}
               />
               <Stack direction="row" spacing={2}>
                 <TimePicker
                   color="secondary"
                   label="Pocetak"
-                  value={value}
-                  onChange={handleChangeDate}
+                  value={vrijemePocetka}
+                  onChange={setVrijemePocetka}
                   renderInput={(params) => <TextField color="secondary" {...params} />}
                 />
                 <TimePicker
                   color="secondary"
                   label="Kraj"
-                  value={value}
-                  onChange={handleChangeDate}
+                  value={vrijemeZavrsetka}
+                  onChange={setVrijemeZavrsetka}
                   renderInput={(params) => <TextField color="secondary" {...params} />}
                 />
               </Stack>
@@ -239,7 +267,53 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
           </LocalizationProvider>
         </Stack>
       </ValidatorForm>
+      <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>  
+        <Button variant="text" style={{ marginRight: '10px' }} onClick={handleClose}>
+          Odustani
+        </Button>
+        <Button type="submit" form="zTuraS1" variant="contained">
+          Sljedece
+        </Button>  
+      </Box>
     </>,
+    <>
+      <List style={{ padding: '0' }} dense={true}>
+      {vrsteQuadova.map((vq) => {
+        const quadoviUListi = quadovi.filter((q) => q.vrstaQuadaId === vq.id);
+        if (quadoviUListi.length > 0) {
+          return (
+            <DropDownWrap
+              key={vq.id}
+              titleChildren={
+                <>
+                  <Avatar sx={{ width: 20, height: 20, bgcolor: `${vq.boja}`, margin:'2px', marginRight: "5px" }}> </Avatar>
+                  <Typography style={{ margin: '0', padding: '0'}}>{vq.naziv}</Typography>
+                </>
+              }
+            >
+              <List style={{ padding: '0' }} dense={true}>
+                {quadoviUListi.map(q => {
+                  return (
+                    <ListItem disablePadding style={{ padding: '0'}}>
+                      <ListItemButton onClick={() => handleToggleCheck(q.id)}>
+                        <ListItemIcon>
+                          <Checkbox
+                            checked={checked[q.id]}
+                            disableRipple
+                          />
+                        </ListItemIcon>
+                        <Typography style={{ margin: '0', padding: '0'}}>{q.naziv}</Typography>
+                      </ListItemButton>
+                    </ListItem>
+                  )
+                })}
+              </List>
+            </DropDownWrap>
+          );
+        }
+      })}
+      </List>
+    </>
   ];
  
   return (
@@ -260,7 +334,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
             paddingLeft: '8px',
           }}
         >
-          <Stepper alternativeLabel activeStep={0} connector={<ColorlibConnector />}>
+          <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel StepIconComponent={ColorlibStepIcon}></StepLabel>
@@ -280,7 +354,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <StyledDialogContent>{stepContent[0]}</StyledDialogContent>
+        <StyledDialogContent>{stepContent[step]}</StyledDialogContent>
       </Dialog>
     </>
   );

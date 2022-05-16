@@ -48,14 +48,11 @@ export function GlobalProvider({ children }) {
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setIsLogiran(true);
-      console.log(user)
     } else {
       setIsLogiran(false);
     }
     setIsLoading(false)
   });
-
-  console.log(isLogiran);
 
   return (
     <GlobalContext.Provider

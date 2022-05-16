@@ -58,7 +58,6 @@ const getData = async (data, setData, start, setStart) => {
         datum: new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate()),
         tureData: [...tempData],
       });
-      console.log(array);
     } catch (e) { 
       console.error(e)
       break
@@ -84,8 +83,6 @@ export function TureProvider({ children }) {
     getDataF('vrsteTura', setVrsteTura);
     console.log('--Fetching data from firebase --');
   }, []);
-
-  console.log(zTure);
 
   const handleGetData = () => {
     getData(zTure, setZTure, startFrom, setStartFrom);
