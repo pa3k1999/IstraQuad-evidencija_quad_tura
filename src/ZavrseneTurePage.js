@@ -22,7 +22,7 @@ function ZavrseneTurePage() {
     handleGetData();
   }, []);
 
-//TODO: dodati popup za dodavanje tura
+  console.log(zTure);
 
   return (
     <TabWrap title="Zavrsene ture">

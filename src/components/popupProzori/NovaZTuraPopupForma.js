@@ -134,51 +134,76 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
   const { theme } = useContext(GlobalContext);
   const { vrsteTura, vodici, quadovi, vrsteQuadova } = useContext(TureContext);
 
+  const title = {
+    0: 'Izrada ture',
+    1: 'Odabir quadova',
+    2: 'Dodavanje napomena',
+  };
+
   const [novaZTura, setNovaZTura] = useState({});
   const [checked, setChecked] = useState({});
-  const [step, setStep] =useState(0);
+  const [step, setStep] = useState(0);
 
   const [selectedVTure, changeSelectedVTure, resetSelectedVTure, setSelectedVTure] = useInputState('');
   const [selectedVodic, changeSelectedVodic, resetSelectedVodic, setSelectedVodic] = useInputState('');
   const [nazivTure, changeNazivTure, resetNazivTure, setNazivTure] = useInputState('');
+  const [brVozaca, setBrVozaca] = useState(0);
+  const [brSuvozaca, changeBrSuvozaca, resetBrSuvozaca, setBrSuvozaca] = useInputState(0);
   const [vrijemePocetka, setVrijemePocetka] = useState(new Date());
   const [vrijemeZavrsetka, setVrijemeZavrsetka] = useState(new Date());
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   useEffect(() => {
-    const temp = quadovi.map(q => [q.id, false]) 
+    const temp = quadovi.map((q) => [q.id, false]);
     setChecked(Object.fromEntries(temp));
   }, [quadovi]);
 
-
   const handleStep1 = () => {
-    setNovaZTura({naziv: nazivTure, vodicId: selectedVodic, vrijemePocetka: vrijemePocetka, vrijemeZavrsetka: vrijemeZavrsetka, vrstaTureId: selectedVTure});
+    setNovaZTura({
+      naziv: nazivTure,
+      vodicId: selectedVodic,
+      vrijemePocetka: vrijemePocetka,
+      vrijemeZavrsetka: vrijemeZavrsetka,
+      vrstaTureId: selectedVTure,
+    });
     setStep(1);
-  }
+  };
 
   const handleStep2 = () => {
-    
-  }
+    const selectedQuadovi = Object.keys(checked)
+      .filter((k) => checked[k] === true)
+      .map((q) => {
+        return { idQuada: q };
+      });
+    setNovaZTura({ ...novaZTura, quadovi: selectedQuadovi, brVozaca: brVozaca, brSuvozaca: parseInt(brSuvozaca)});
+    setStep(2);
+  };
 
-  const handleStep3 = () => {
-    
-  }
+  const handleStep3 = () => {};
+
+  const handleStepBack = () => {
+    setStep(step - 1);
+  };
 
   const handleDodaj = () => {};
 
   const handleToggleCheck = (id) => {
-    setChecked({...checked, [id]: !checked[id]});
-    console.log(checked)
-    console.log(id)
-  }
+    setChecked({ ...checked, [id]: !checked[id] });
+  };
 
   useEffect(() => {
-   if(selectedVTure !== ''){ 
-   setVrijemeZavrsetka(new Date(vrijemePocetka.getTime() + vrsteTura.find(vT => vT.id === selectedVTure).minute*60000));
-   } else {
-   setVrijemeZavrsetka(vrijemePocetka)
-  }
+    setBrVozaca(Object.keys(checked).filter((k) => checked[k] === true).length);
+  }, [checked]);
+
+  useEffect(() => {
+    if (selectedVTure !== '') {
+      setVrijemeZavrsetka(
+        new Date(vrijemePocetka.getTime() + vrsteTura.find((vT) => vT.id === selectedVTure).minute * 60000)
+      );
+    } else {
+      setVrijemeZavrsetka(vrijemePocetka);
+    }
   }, [vrijemePocetka, selectedVTure]);
 
   useEffect(() => {
@@ -188,134 +213,181 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
       }
       return true;
     });
-  }, [selectedVTure, selectedVodic, nazivTure]);
+    
+  }, []);
 
   const stepContent = [
     <>
-      <ValidatorForm id="zTuraS1" onSubmit={handleStep1}>
-        <Stack alignItems="center" spacing={1} marginTop="20px">
-          <TextValidator
-            label="Naziv ture"
-            color="secondary"
-            style={{ width: '300px' }}
-            value={nazivTure}
-            onChange={changeNazivTure}
-            validators={['isEmpty']}
-            errorMessages={['Nesmije bit prazno']}
-            helperText=" "
-          />
-          <SelectValidator
-            color="secondary"
-            id="vrstaTure-select"
-            value={selectedVTure}
-            label="Vrsta ture"
-            onChange={changeSelectedVTure}
-            sx={{ m: 1, minWidth: '300px' }}
-            helperText=" "
-            validators={['isEmpty']}
-            errorMessages={['Nesmije bit prazno']}
-          >
-            {vrsteTura.map((vT) => (
-              <StyledMenuItem key={vT.id} value={vT.id}>
-                {vT.naziv}
-              </StyledMenuItem>
-            ))}
-          </SelectValidator>
-          <SelectValidator
-            color="secondary"
-            id="vodic-select"
-            value={selectedVodic}
-            label="Vodic"
-            onChange={changeSelectedVodic}
-            sx={{ m: 1, minWidth: '300px' }}
-            helperText=" "
-            validators={['isEmpty']}
-            errorMessages={['Nesmije bit prazno']}
-          >
-            {vodici.map((v) => (
-              <StyledMenuItem key={v.id} value={v.id}>{`${v.ime} ${v.prezime}`}</StyledMenuItem>
-            ))}
-          </SelectValidator>
-          <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
-            <Stack spacing={3} width="300px" paddingBottom="20px">
-              <MobileDatePicker
-                className="aaa"
-                color="secondary"
-                label="Datum"
-                inputFormat="dd/MM/yyyy"
-                value={vrijemePocetka}
-                onChange={setVrijemePocetka}
-                renderInput={(params) => <TextField color="secondary" {...params} />}
-              />
-              <Stack direction="row" spacing={2}>
-                <TimePicker
+      <StyledDialogContent style={{ height: '70vh', maxHeight: '500px' }}>
+        <ValidatorForm id="zTuraS1" onSubmit={handleStep1}>
+          <Stack alignItems="center" spacing={1} marginTop="20px">
+            <TextValidator
+              label="Naziv ture"
+              color="secondary"
+              style={{ width: '300px' }}
+              value={nazivTure}
+              onChange={changeNazivTure}
+              validators={['isEmpty']}
+              errorMessages={['Nesmije bit prazno']}
+              helperText=" "
+            />
+            <SelectValidator
+              color="secondary"
+              id="vrstaTure-select"
+              value={selectedVTure}
+              label="Vrsta ture"
+              onChange={changeSelectedVTure}
+              sx={{ m: 1, minWidth: '300px' }}
+              helperText=" "
+              validators={['isEmpty']}
+              errorMessages={['Nesmije bit prazno']}
+            >
+              {vrsteTura.map((vT) => (
+                <StyledMenuItem key={vT.id} value={vT.id}>
+                  {vT.naziv}
+                </StyledMenuItem>
+              ))}
+            </SelectValidator>
+            <SelectValidator
+              color="secondary"
+              id="vodic-select"
+              value={selectedVodic}
+              label="Vodic"
+              onChange={changeSelectedVodic}
+              sx={{ m: 1, minWidth: '300px' }}
+              helperText=" "
+              validators={['isEmpty']}
+              errorMessages={['Nesmije bit prazno']}
+            >
+              {vodici.map((v) => (
+                <StyledMenuItem key={v.id} value={v.id}>{`${v.ime} ${v.prezime}`}</StyledMenuItem>
+              ))}
+            </SelectValidator>
+            <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
+              <Stack spacing={3} width="300px" paddingBottom="20px">
+                <MobileDatePicker
+                  className="aaa"
                   color="secondary"
-                  label="Pocetak"
+                  label="Datum"
+                  inputFormat="dd/MM/yyyy"
                   value={vrijemePocetka}
                   onChange={setVrijemePocetka}
                   renderInput={(params) => <TextField color="secondary" {...params} />}
                 />
-                <TimePicker
-                  color="secondary"
-                  label="Kraj"
-                  value={vrijemeZavrsetka}
-                  onChange={setVrijemeZavrsetka}
-                  renderInput={(params) => <TextField color="secondary" {...params} />}
-                />
+                <Stack direction="row" spacing={2}>
+                  <TimePicker
+                    color="secondary"
+                    label="Pocetak"
+                    value={vrijemePocetka}
+                    onChange={setVrijemePocetka}
+                    renderInput={(params) => <TextField color="secondary" {...params} />}
+                  />
+                  <TimePicker
+                    color="secondary"
+                    label="Kraj"
+                    value={vrijemeZavrsetka}
+                    onChange={setVrijemeZavrsetka}
+                    renderInput={(params) => <TextField color="secondary" {...params} />}
+                  />
+                </Stack>
               </Stack>
-            </Stack>
-          </LocalizationProvider>
-        </Stack>
-      </ValidatorForm>
-      <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>  
+            </LocalizationProvider>
+          </Stack>
+        </ValidatorForm>
+      </StyledDialogContent>
+      <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>
         <Button variant="text" style={{ marginRight: '10px' }} onClick={handleClose}>
           Odustani
         </Button>
         <Button type="submit" form="zTuraS1" variant="contained">
           Sljedece
-        </Button>  
+        </Button>
       </Box>
     </>,
     <>
-      <List style={{ padding: '0' }} dense={true}>
-      {vrsteQuadova.map((vq) => {
-        const quadoviUListi = quadovi.filter((q) => q.vrstaQuadaId === vq.id);
-        if (quadoviUListi.length > 0) {
-          return (
-            <DropDownWrap
-              key={vq.id}
-              titleChildren={
-                <>
-                  <Avatar sx={{ width: 20, height: 20, bgcolor: `${vq.boja}`, margin:'2px', marginRight: "5px" }}> </Avatar>
-                  <Typography style={{ margin: '0', padding: '0'}}>{vq.naziv}</Typography>
-                </>
-              }
-            >
-              <List style={{ padding: '0' }} dense={true}>
-                {quadoviUListi.map(q => {
-                  return (
-                    <ListItem disablePadding style={{ padding: '0'}}>
-                      <ListItemButton onClick={() => handleToggleCheck(q.id)}>
-                        <ListItemIcon>
-                          <Checkbox
-                            checked={checked[q.id]}
-                            disableRipple
-                          />
-                        </ListItemIcon>
-                        <Typography style={{ margin: '0', padding: '0'}}>{q.naziv}</Typography>
-                      </ListItemButton>
-                    </ListItem>
-                  )
-                })}
-              </List>
-            </DropDownWrap>
-          );
-        }
-      })}
-      </List>
+      <StyledDialogContent style={{ height: '70vh', maxHeight: '500px' }}>
+        <ValidatorForm id="zTuraS2" onSubmit={handleStep2}>
+          <Stack alignItems="center">
+            <Stack direction="row" spacing={2} marginTop="20px">
+              <TextValidator
+                disabled
+                label="Broj vozaca"
+                color="secondary"
+                style={{ width: '120px' }}
+                value={brVozaca}
+                helperText=" "
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <TextValidator
+                label="Broj Suvozaca"
+                color="secondary"
+                style={{ width: '120px' }}
+                value={brSuvozaca}
+                onChange={changeBrSuvozaca}
+                validators={['isEmpty', 'minNumber: 0', `maxNumber: ${brVozaca}`]}
+                errorMessages={['', '',`Max: ${brVozaca}`]}
+                helperText=" "
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Stack>
+          </Stack>
+        </ValidatorForm>
+        <List style={{ padding: '0' }} dense={true}>
+          {vrsteQuadova.map((vq) => {
+            const quadoviUListi = quadovi.filter((q) => q.vrstaQuadaId === vq.id);
+            if (quadoviUListi.length > 0) {
+              return (
+                <DropDownWrap
+                  key={vq.id}
+                  titleChildren={
+                    <>
+                      <Avatar sx={{ width: 20, height: 20, bgcolor: `${vq.boja}`, margin: '2px', marginRight: '5px' }}>
+                        {' '}
+                      </Avatar>
+                      <Typography style={{ margin: '0', padding: '0' }}>{vq.naziv}</Typography>
+                    </>
+                  }
+                >
+                  <List style={{ padding: '0' }} dense={true}>
+                    {quadoviUListi.map((q) => {
+                      return (
+                        <ListItem disablePadding style={{ padding: '0' }}>
+                          <ListItemButton onClick={() => handleToggleCheck(q.id)}>
+                            <ListItemIcon>
+                              <Checkbox checked={checked[q.id]} disableRipple />
+                            </ListItemIcon>
+                            <Typography style={{ margin: '0', padding: '0' }}>{q.naziv}</Typography>
+                          </ListItemButton>
+                        </ListItem>
+                      );
+                    })}
+                  </List>
+                </DropDownWrap>
+              );
+            }
+          })}
+        </List>
+      </StyledDialogContent>
+      <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>
+        <Button variant="text" style={{ marginRight: '10px' }} onClick={handleStepBack}>
+          Natrag
+        </Button>
+        <Button variant="contained" type="submit" form="zTuraS2">
+          Sljedece
+        </Button>
+      </Box>
+    </>,
+    <>
+      a
     </>
   ];
- 
+
   return (
     <>
       <Dialog
@@ -334,6 +406,9 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
             paddingLeft: '8px',
           }}
         >
+          <Box textAlign='center' marginBottom='10px'>
+            {title[step]}
+          </Box>
           <Stepper alternativeLabel activeStep={step} connector={<ColorlibConnector />}>
             {steps.map((label) => (
               <Step key={label}>
@@ -354,7 +429,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <StyledDialogContent>{stepContent[step]}</StyledDialogContent>
+        {stepContent[step]}
       </Dialog>
     </>
   );
