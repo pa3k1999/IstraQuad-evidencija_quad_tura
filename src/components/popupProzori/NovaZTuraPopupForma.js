@@ -20,6 +20,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  Divider,
   IconButton,
   List,
   ListItem,
@@ -28,6 +29,7 @@ import {
   MenuItem,
   Slide,
   SvgIcon,
+  TextareaAutosize,
   TextField,
   Typography,
   useMediaQuery,
@@ -41,6 +43,16 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import hrLocale from 'date-fns/locale/hr';
 import { Box } from '@mui/system';
 import DropDownWrap from '../DropDownWrap.js';
+
+const StyledTextareaAutosize = styled((props) => <TextareaAutosize {...props} />)(({ theme }) => ({
+  ...theme.typography.subtitle2,
+  width: 'auto',
+  padding: '5px 10px', 
+  borderRadius: 0,
+  '&:focus-visible': {
+    outline: 'none'
+  },
+}));
 
 const StyledDialogContent = styled((props) => <DialogContent {...props} />)(() => ({
   padding: 0,
@@ -140,7 +152,8 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
     2: 'Dodavanje napomena',
   };
 
-  const [novaZTura, setNovaZTura] = useState({});
+  const [novaZTura, setNovaZTura] = useState({quadovi: []});
+  const [novaeNapomene, setNoveNapomene] = useState([]);
   const [checked, setChecked] = useState({});
   const [step, setStep] = useState(0);
 
@@ -176,17 +189,23 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
       .map((q) => {
         return { idQuada: q };
       });
+    const temp = selectedQuadovi.map((q) => [q.idQuada, '']);
+    setNoveNapomene(Object.fromEntries(temp));
     setNovaZTura({ ...novaZTura, quadovi: selectedQuadovi, brVozaca: brVozaca, brSuvozaca: parseInt(brSuvozaca)});
     setStep(2);
   };
 
-  const handleStep3 = () => {};
+  const handleStep3 = () => {
+    console.log(novaeNapomene)
+  };
 
   const handleStepBack = () => {
     setStep(step - 1);
   };
 
-  const handleDodaj = () => {};
+  const handleDodajNapomenu = (e, id) => {
+    setNoveNapomene({...novaeNapomene, [id]: e.target.value});
+  };
 
   const handleToggleCheck = (id) => {
     setChecked({ ...checked, [id]: !checked[id] });
@@ -213,7 +232,12 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
       }
       return true;
     });
-    
+    ValidatorForm.addValidationRule('isNum', (value) => {
+      if (value === '') {
+        return false;
+      }
+      return true;
+    });
   }, []);
 
   const stepContent = [
@@ -315,6 +339,8 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
                 color="secondary"
                 style={{ width: '120px' }}
                 value={brVozaca}
+                validators={['minNumber: 1']}
+                errorMessages={['']}
                 helperText=" "
                 type="number"
                 InputLabelProps={{
@@ -327,7 +353,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
                 style={{ width: '120px' }}
                 value={brSuvozaca}
                 onChange={changeBrSuvozaca}
-                validators={['isEmpty', 'minNumber: 0', `maxNumber: ${brVozaca}`]}
+                validators={['isNum', 'minNumber: 0', `maxNumber: ${brVozaca}`]}
                 errorMessages={['', '',`Max: ${brVozaca}`]}
                 helperText=" "
                 type="number"
@@ -384,7 +410,43 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
       </Box>
     </>,
     <>
-      a
+      <StyledDialogContent style={{ height: '70vh', maxHeight: '500px' }}>
+        <List style={{ padding: '0' }} dense={true}>
+          {novaZTura.quadovi ? novaZTura.quadovi.map(qZT => {
+            const quad = quadovi.find(q => q.id === qZT.idQuada);
+            const quadBoja = vrsteQuadova.find(vQ => vQ.id === quad.vrstaQuadaId).boja;
+            return (
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton style={{ padding: '0'}}>
+                    <Stack style={{width: '100%', overflow: 'hidden'}}>
+                      <Stack direction="row" style={{ padding: '5px 10px', backgroundColor: 'rgba(0, 0, 0, 0.05)'}}>
+                        <Avatar sx={{ width: 20, height: 20, bgcolor: quadBoja, margin:'2px', marginRight: "5px" }}> </Avatar>
+                        <Typography style={{ margin: '0', padding: '0'}}>{quad.naziv}</Typography>
+                      </Stack>
+                      <StyledTextareaAutosize
+                        aria-label="napomena"
+                        minRows={2}
+                        placeholder={`Napomena za ${quad.naziv}`}
+                        onChange={(e) => handleDodajNapomenu(e, quad.id)}
+                        style={{ width: 'auto', padding: '5px 10px', borderRadius: 0, border: 'none'}}
+                      />
+                      </Stack>   
+                  </ListItemButton>
+                </ListItem>
+              </>);
+          }) : null}
+        </List>
+        <Divider style={{borderBottom: '1px solid rgba(0, 0, 0, 0.2)'}}/>
+      </StyledDialogContent>
+      <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>
+        <Button variant="text" style={{ marginRight: '10px' }} onClick={handleStepBack}>
+          Natrag
+        </Button>
+        <Button variant="contained" onClick={handleStep3}>
+          Dodaj
+        </Button>
+      </Box>
     </>
   ];
 

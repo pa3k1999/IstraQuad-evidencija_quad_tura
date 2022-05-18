@@ -41,9 +41,6 @@ function QuadoviUTuriLista() {
             <Divider style={{borderBottom: '2px solid rgba(0, 0, 0, 0.2)'}}/>
           </>
         ))}
-        
-        
-      
     </List>
   );
 }
