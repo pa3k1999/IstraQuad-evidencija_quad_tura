@@ -43,6 +43,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import hrLocale from 'date-fns/locale/hr';
 import { Box } from '@mui/system';
 import DropDownWrap from '../DropDownWrap.js';
+import { Timestamp } from 'firebase/firestore';
 
 const StyledTextareaAutosize = styled((props) => <TextareaAutosize {...props} />)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -142,9 +143,9 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
+function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
   const { theme } = useContext(GlobalContext);
-  const { vrsteTura, vodici, quadovi, vrsteQuadova } = useContext(TureContext);
+  const { vrsteTura, vodici, quadovi, vrsteQuadova, handleNewZTura } = useContext(TureContext);
 
   const title = {
     0: 'Izrada ture',
@@ -176,9 +177,10 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
     setNovaZTura({
       naziv: nazivTure,
       vodicId: selectedVodic,
-      vrijemePocetka: vrijemePocetka,
-      vrijemeZavrsetka: vrijemeZavrsetka,
+      vrijemePocetka: Timestamp.fromDate(vrijemePocetka),
+      vrijemeZavrsetka: Timestamp.fromDate(vrijemeZavrsetka),
       vrstaTureId: selectedVTure,
+      napomene: []
     });
     setStep(1);
   };
@@ -197,6 +199,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = true }) {
 
   const handleStep3 = () => {
     console.log(novaeNapomene)
+    handleNewZTura(novaZTura, novaeNapomene);
   };
 
   const handleStepBack = () => {

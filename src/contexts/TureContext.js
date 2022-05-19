@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { collection, getDocs, limit, orderBy, query, startAfter, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, limit, orderBy, query, setDoc, startAfter, Timestamp, where } from 'firebase/firestore';
 import db from '../firebase.config';
-import { getDataF } from './firestoreFunkcije';
+import { getDataF, handleDeleteeDataF, handleNewDataF, handleUpdateDataF } from './firestoreFunkcije';
 
 export const TureContext = createContext();
 
@@ -29,7 +29,7 @@ const getQuadovi = async (idTure) => {
 
 const getData = async (data, setData, start, setStart) => {
   let startAft = start;
-  let array = [];
+  let obj = {};
   for (let i = 0; i < 16; i++) {
     const first =
       startAft === undefined
@@ -53,23 +53,53 @@ const getData = async (data, setData, start, setStart) => {
         const quadovi = await getQuadovi(doc.id);
         tempData.push({ id: doc.id, ...doc.data(), napomene: napomene, quadovi: quadovi });
       }
-
-      array.push({
-        datum: new Date(firstDate.getFullYear(), firstDate.getMonth(), firstDate.getDate()),
-        tureData: [...tempData],
-      });
+      obj = {
+        ...obj,
+        [`${firstDate.getDate()}.${firstDate.getMonth()}.${firstDate.getFullYear()}`] : [...tempData],
+      };
     } catch (e) { 
       console.error(e)
       break
     }
   }
   setStart(startAft);
-  setData([...data, ...array]);
+  setData({...data, ...obj});
 };
 
+const handleNewZTuraF = async(zTura, napomene, vrsta, state, setState) => {
+  const dataTemp = {...zTura};
+  delete dataTemp.quadovi;
+  delete dataTemp.napomene;
+  try {
+    const docRef = await addDoc(collection(db, vrsta), { ...dataTemp });
+    const docId = docRef.id;
+
+    zTura.quadovi.forEach(async q => {
+      await setDoc(doc(db, vrsta, docRef.id, 'quadovi', q.idQuada), {})
+    })
+    const tempNapomene = [];
+    Object.keys(napomene).forEach(async n => {
+      if(napomene[n].trim() !== ''){
+        const nap = {napomena: napomene[n], quadId: n, turaId: docId}
+        const docNap = await addDoc(collection(db, 'napomene'), { ...nap })
+        tempNapomene.push({...nap, id: docNap.id});
+      }
+    })
+ 
+    const datum = zTura.vrijemePocetka.toDate();
+    let ture = state[`${datum.getDate()}.${datum.getMonth()}.${datum.getFullYear()}`] || []
+    console.log(ture)
+    ture.push({...zTura, napomene: tempNapomene});
+    setState({...state, [`${datum.getDate()}.${datum.getMonth()}.${datum.getFullYear()}`]: ture})
+
+    console.log('Document written with ID: ' + docId);
+  } catch (e) {
+    console.error('Error adding document: ', e);
+  }
+}
 export function TureProvider({ children }) {
   const [selectedZTura, setSelectedZTura] = useState({id: '', brVozaca: '', brSuvozaca: '', naziv: '', vodicId: '', vrstaTureId: '', quadovi: [], napomene: []});
-  const [zTure, setZTure] = useState([]);
+  const [zTure, setZTure] = useState({});
   const [startFrom, setStartFrom] = useState();
   const [vrsteTura, setVrsteTura] = useState([]);
   const [vodici, setVodici] = useState([]);
@@ -88,5 +118,9 @@ export function TureProvider({ children }) {
     getData(zTure, setZTure, startFrom, setStartFrom);
   };
 
-  return <TureContext.Provider value={{ handleGetData, zTure, vrsteTura, vodici, vrsteQuadova, quadovi, selectedZTura, setSelectedZTura }}>{children}</TureContext.Provider>;
+  const handleNewZTura = async(zTura, napomene) => {
+    await handleNewZTuraF(zTura, napomene, 'ture', zTure, setZTure);
+  }
+
+  return <TureContext.Provider value={{ handleGetData, zTure, vrsteTura, vodici, vrsteQuadova, quadovi, selectedZTura, setSelectedZTura, handleNewZTura}}>{children}</TureContext.Provider>;
 }

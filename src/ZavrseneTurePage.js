@@ -26,14 +26,14 @@ function ZavrseneTurePage() {
 
   return (
     <TabWrap title="Zavrsene ture">
-      {zTure.map((zT) => {
-        const datum = `${zT.datum.getDate()}.${zT.datum.getMonth()+1}.${zT.datum.getFullYear()}.`;
+      {Object.keys(zTure).map((zT) => {
+       
         return (
           <DropDownWrap
-            key={datum}
-            titleChildren={<Typography style={{ margin: '0', padding: '0' }}>{datum}</Typography>}
+            key={zT}
+            titleChildren={<Typography style={{ margin: '0', padding: '0' }}>{zT}</Typography>}
           >
-            <ZavrseneTureLista zTure={zT.tureData} handleOpenDetalji={handleOpenDetalji}/>
+            <ZavrseneTureLista zTure={zTure[zT]} handleOpenDetalji={handleOpenDetalji}/>
           </DropDownWrap>
         );
       })}
