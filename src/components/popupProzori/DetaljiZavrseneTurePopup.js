@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Dialog, DialogContent, DialogTitle, Divider, IconButton, Slide, Stack, Typography, useMediaQuery } from '@mui/material';
-import React, { forwardRef, useContext } from 'react';
+import React, { forwardRef, useContext, useEffect, useState } from 'react';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import { TureContext } from '../../contexts/TureContext';
 import QuadoviUTuriLista from '../QuadoviUTuriLista';
@@ -29,6 +29,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 function DetaljiZavrseneTurePopup({ isOpen, handleClose }) {
   const { vrsteTura, vodici, selectedZTura } = useContext(TureContext);
+  const { theme } = useContext(GlobalContext);
 
   const zTuraVrataTure = vrsteTura.find(vT => vT.id === selectedZTura.vrstaTureId);
   const zTuraVodic = vodici.find(v => v.id === selectedZTura.vodicId);
@@ -37,7 +38,6 @@ function DetaljiZavrseneTurePopup({ isOpen, handleClose }) {
   const vrZ = selectedZTura.vrijemeZavrsetka ? selectedZTura.vrijemeZavrsetka.toDate() : new Date();
   const datum = `${vrP.getDate()}.${vrP.getMonth()+1}.${vrP.getFullYear()}.`;
 
-  const { theme } = useContext(GlobalContext);
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (

@@ -145,7 +145,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
   const { theme } = useContext(GlobalContext);
-  const { vrsteTura, vodici, quadovi, vrsteQuadova, handleNewZTura } = useContext(TureContext);
+  const { vrsteTura, vodici, quadovi, vrsteQuadova, handleNewZTura, handleSetRaspon } = useContext(TureContext);
 
   const title = {
     0: 'Izrada ture',
@@ -179,8 +179,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
       vodicId: selectedVodic,
       vrijemePocetka: Timestamp.fromDate(vrijemePocetka),
       vrijemeZavrsetka: Timestamp.fromDate(vrijemeZavrsetka),
-      vrstaTureId: selectedVTure,
-      napomene: []
+      vrstaTureId: selectedVTure
     });
     setStep(1);
   };
@@ -188,10 +187,9 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
   const handleStep2 = () => {
     const selectedQuadovi = Object.keys(checked)
       .filter((k) => checked[k] === true)
-      .map((q) => {
-        return { idQuada: q };
-      });
-    const temp = selectedQuadovi.map((q) => [q.idQuada, '']);
+      .map((q) => q);
+    const temp = selectedQuadovi.map((q) => [q, '']);
+    console.log(selectedQuadovi)
     setNoveNapomene(Object.fromEntries(temp));
     setNovaZTura({ ...novaZTura, quadovi: selectedQuadovi, brVozaca: brVozaca, brSuvozaca: parseInt(brSuvozaca)});
     setStep(2);
@@ -416,7 +414,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
       <StyledDialogContent style={{ height: '70vh', maxHeight: '500px' }}>
         <List style={{ padding: '0' }} dense={true}>
           {novaZTura.quadovi ? novaZTura.quadovi.map(qZT => {
-            const quad = quadovi.find(q => q.id === qZT.idQuada);
+            const quad = quadovi.find(q => q.id === qZT);
             const quadBoja = vrsteQuadova.find(vQ => vQ.id === quad.vrstaQuadaId).boja;
             return (
               <>

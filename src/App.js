@@ -18,6 +18,11 @@ import adminsUIDs from './adminsUIDs';
 import VodiciPage from './VodiciPage';
 import { VodiciProvider } from './contexts/VodiciContext';
 
+//TODO: napraviti provjere brisanja i zabrane
+//      napraviti pregled profila i uredjivanje podataka
+//      napraviti pregled quadova (koliko odradjenih tura i sve napomene)
+//      napraviti backend radi brisanja korisnika i auto logouta
+
 function App() {
   const { theme, auth} = useContext(GlobalContext);
 

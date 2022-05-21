@@ -5,7 +5,6 @@ import ConfirmBrisanje from './components/popupProzori/ConfirmBrisanje';
 import NoviQuadPopupForma from './components/popupProzori/NoviQuadPopupForma';
 import QuadoviLista from './components/QuadoviLista';
 import TabWrap from './components/TabWrap';
-import { GlobalContext } from './contexts/GlobalContext';
 import { QuadoviContext } from './contexts/QuadoviContext';
 
 function QuadoviPage() {
@@ -14,13 +13,9 @@ function QuadoviPage() {
 
   const [isOpenForma, setIsOpenForma] = useState(false);
   const [isConfirmDOpen, setIsConfirmDOpen] = useState(false);
-  
-//TODO: postavit dinamican prikaz podataka
-//      napravit popup za dodavanje tura
-//      napravit stranicu za prikaz detaljaS pojedinih tura 
 
   return (
-    <TabWrap title="Quadovi">
+    <TabWrap title={<Typography variant="h6">Quadovi</Typography>}>
       {vrsteQuadova.map((vq) => {
         const quadoviUListi = quadovi.filter((q) => q.vrstaQuadaId === vq.id);
         if (quadoviUListi.length > 0) {

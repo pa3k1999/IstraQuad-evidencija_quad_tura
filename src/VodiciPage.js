@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React, { useState } from 'react'
 import NoviVodicPopupForma from './components/popupProzori/NoviVodicPopupForma';
 import TabWrap from './components/TabWrap';
@@ -8,7 +9,7 @@ function VodiciPage() {
   const [isOpenForma, setIsOpenForma] = useState(false);
 
   return (
-    <TabWrap title='Vodici'>
+    <TabWrap title={<Typography variant="h6">Vodici</Typography>}>
       <VodiciLista/>
       <NoviVodicPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
     </TabWrap>

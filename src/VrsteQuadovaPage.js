@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React, { memo, useState } from 'react';
 import NovaVQuadaPopupForma from './components/popupProzori/NovaVQuadaPopupForma';
 import TabWrap from './components/TabWrap';
@@ -8,7 +9,7 @@ function VrsteQuadovaPage() {
 
   return (
     
-    <TabWrap title='Vrste Quadova'>
+    <TabWrap title={<Typography variant="h6">Vrste Quadova</Typography>}>
         <VrsteQuadovaLista handleSetIsOpenForma={setIsOpenForma}/>
         <NovaVQuadaPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
     </TabWrap>

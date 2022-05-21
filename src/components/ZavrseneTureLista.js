@@ -1,4 +1,4 @@
-import React, { memo, useContext } from 'react';
+import React, { memo, useContext, useState } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -35,7 +35,7 @@ const ListItemSt = memo(function ListItemSt({ zTura, handleOpenDetalji }) {
 
   const quadoviUTuri = {};
   zTura.quadovi.forEach((qT) => {
-    const quad = quadovi.find((q) => q.id === qT.idQuada);
+    const quad = quadovi.find((q) => q.id === qT);
     quadoviUTuri[quad.vrstaQuadaId] = (quadoviUTuri[quad.vrstaQuadaId] || 0) + 1;
   });
 
