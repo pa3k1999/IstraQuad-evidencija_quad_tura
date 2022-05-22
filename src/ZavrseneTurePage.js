@@ -1,6 +1,6 @@
 import { LocalizationProvider, MobileDatePicker } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import { AppBar, Divider, Paper, Tab, Tabs, TextField, Typography } from '@mui/material';
+import { AppBar, Button, Divider, Paper, Stack, Tab, Tabs, TextField, Typography } from '@mui/material';
 import React, { memo, useContext, useEffect, useState } from 'react';
 import DropDownWrap from './components/DropDownWrap';
 import DetaljiZavrseneTurePopup from './components/popupProzori/DetaljiZavrseneTurePopup';
@@ -15,6 +15,7 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import styled from '@emotion/styled';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
+import { Box } from '@mui/system';
 
 const Accordion = styled((props) => <MuiAccordion disableGutters elevation={0} {...props} />)(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
@@ -79,6 +80,26 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
   }),
 );
 
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 2 , paddingTop: 0}}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   padding: 0
 }));
@@ -88,13 +109,15 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
 //      dodati brisanje i uredjivanje napomena
 
 function ZavrseneTurePage() {
-  const { zTure } = useContext(TureContext);
+  const { zTure, handleSetRaspon, handleSetRasponOdDo } = useContext(TureContext);
   const { theme } = useContext(GlobalContext);
 
   const [isDetaljiOpen, setIsDetaljiOpen] = useState(false);
   const [value, setValue] = React.useState(0);
 
-  const [vrijemePocetka, setVrijemePocetka] = useState(new Date());
+  const [datumFilter, setDatumFilter] = useState(new Date());
+  const [datumOdFilter, setDatumOdFilter] = useState(new Date());
+  const [datumDoFilter, setDatumDoFilter] = useState(new Date());
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -106,6 +129,15 @@ function ZavrseneTurePage() {
   const handleCloseDetalji = () => {
     setIsDetaljiOpen(false);
   };
+
+  const handleFiltriraj = () => {
+    console.log(datumFilter)
+    handleSetRaspon(datumFilter);
+  }
+
+  const handleFiltrirajOdDo = () => {
+    handleSetRasponOdDo(datumOdFilter, datumDoFilter);
+  }
 
   function a11yProps(index) {
     return {
@@ -130,23 +162,60 @@ function ZavrseneTurePage() {
           onChange={handleChange}
           variant="fullWidth"
         >
-          <StyledTab label="Mjesecno" />
-          <StyledTab label="Od-Do" />
+          <StyledTab label="Mjesecno" {...a11yProps(0)}/>
+          <StyledTab label="Od-Do" {...a11yProps(1)}/>
         </StyledTabs>
-          <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
-            <MobileDatePicker
-              views={['year', 'month']}
-              className="aaa"
-              color="secondary"
-              label="Datum"
-              inputFormat="MM.yyyy."
-              minDate={new Date('2008-01-01')}
-              maxDate={new Date('2050-01-01')}
-              value={vrijemePocetka}
-              onChange={setVrijemePocetka}
-              renderInput={(params) => <TextField color="secondary" {...params} />}
-            />
-          </LocalizationProvider>
+        <TabPanel value={value} index={0}>
+          <Stack>
+            <Box marginTop={1}>
+              <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
+                <MobileDatePicker
+                  views={['year', 'month']}
+                  className="aaa"
+                  color="secondary"
+                  label="Datum"
+                  inputFormat="MM/yyyy"
+                  minDate={new Date('2008-01-01')}
+                  maxDate={new Date('2050-01-01')}
+                  value={datumFilter}
+                  onChange={setDatumFilter}
+                  renderInput={(params) => <TextField color="primary" {...params} />}
+                />
+              </LocalizationProvider>
+            </Box>
+            <Box width='100%' textAlign='right' > <Button variant="contained" onClick={handleFiltriraj}>Filtriraj</Button> </Box>
+          </Stack>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <Stack>
+            <Box marginTop={1}>
+              <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
+                <Stack direction='row' alignItems='center' spacing={1}>
+                  <MobileDatePicker
+                    label="Od"
+                    inputFormat="dd/MM/yyyy"
+                    minDate={new Date('2008-01-01')}
+                    maxDate={new Date('2050-01-01')} 
+                    value={datumOdFilter}
+                    onChange={setDatumOdFilter}
+                    renderInput={(params) => <TextField style={{ width: '110px' }} color="primary" {...params} />}
+                  />
+                  <Typography variant="h5">-</Typography>
+                  <MobileDatePicker
+                    label="Do"
+                    inputFormat="dd/MM/yyyy"
+                    minDate={new Date('2008-01-01')}
+                    maxDate={new Date('2050-01-01')}
+                    value={datumDoFilter}
+                    onChange={setDatumDoFilter}
+                    renderInput={(params) => <TextField style={{ width: '110px' }} color="primary" {...params} />}
+                  />
+                </Stack>
+              </LocalizationProvider>
+            </Box>
+            <Box width='100%' textAlign='right' > <Button variant="contained" onClick={handleFiltrirajOdDo}>Filtriraj</Button> </Box>
+          </Stack>
+        </TabPanel>
         </AccordionDetails>
       </Accordion>
 

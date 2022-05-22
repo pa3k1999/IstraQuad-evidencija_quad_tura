@@ -95,9 +95,16 @@ export function TureProvider({ children }) {
     })
   }
 
+  const handleSetRasponOdDo = (refOd, refDo) => {
+    setRasponDatuma({
+      pocetak: new Date(refOd.getFullYear(), refOd.getMonth(), refOd.getDate(), 0, 0),
+      kraj: new Date(refDo.getFullYear(), refDo.getMonth(), refDo.getDate()+1, 0, 0)
+    })
+  }
+
   const handleNewZTura = async(NovaZTura, napomene) => {
     await handleNewZTuraF(NovaZTura, napomene, zTure, setZTure, rasponDatuma);
   }
 
-  return <TureContext.Provider value={{zTure, vrsteTura, vodici, vrsteQuadova, quadovi, selectedZTura, setSelectedZTura, handleNewZTura, handleSetRaspon, getNapomene}}>{children}</TureContext.Provider>;
+  return <TureContext.Provider value={{zTure, vrsteTura, vodici, vrsteQuadova, quadovi, selectedZTura, setSelectedZTura, handleNewZTura, handleSetRaspon, getNapomene, handleSetRasponOdDo}}>{children}</TureContext.Provider>;
 }
