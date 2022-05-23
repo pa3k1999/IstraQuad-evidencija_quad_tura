@@ -59,8 +59,7 @@ function NavBar() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="static" sx={{ bgcolor: 'primary.main' }}>
+        <AppBar sx={{ bgcolor: 'primary.main' }}>
           <Toolbar>
             <IconButton
               size="large"
@@ -78,7 +77,7 @@ function NavBar() {
            {auth.currentUser ? <Button color="inherit" onClick={handleOdjava}>Odjavite se</Button> : <></>}
           </Toolbar>
         </AppBar>
-      </Box>
+      
       <StyledSwipeableDrawer
         anchor="left"
         color="primary"

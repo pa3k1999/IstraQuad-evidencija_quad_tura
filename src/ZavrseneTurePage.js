@@ -113,11 +113,13 @@ function ZavrseneTurePage() {
   const { theme } = useContext(GlobalContext);
 
   const [isDetaljiOpen, setIsDetaljiOpen] = useState(false);
+  const [isOpenForma, setIsOpenForma] = useState(false);
   const [value, setValue] = React.useState(0);
 
   const [datumFilter, setDatumFilter] = useState(new Date());
   const [datumOdFilter, setDatumOdFilter] = useState(new Date());
   const [datumDoFilter, setDatumDoFilter] = useState(new Date());
+  
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -148,85 +150,87 @@ function ZavrseneTurePage() {
 
   return (
     <Paper elevation={4} style={{ maxWidth: '700px', margin: 'auto', borderRadius: '15px', overflow: 'hidden' }}>
-      <Accordion>
+      <Box style={{backgroundColor: theme.palette.primary.main, minHeight: '32px', padding: '10px 20px'}}>
+      <Accordion style={{backgroundColor: theme.palette.primary.main, border: 'none'}}>
         <AccordionSummary
           expandIcon={<SearchIcon />}
-          style={{ backgroundColor: theme.palette.primary.main, minHeight: '32px', color: 'white', padding: '10px 20px' }}
+          style={{ backgroundColor: theme.palette.primary.main, minHeight: '32px', color: 'white' }}
         >
           <Typography variant="h6">Zavrsene Ture</Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        
+        <AccordionDetails style={{backgroundColor: theme.palette.background.paper, border: 'none', borderRadius: '15px'}}>
           <Divider />
-        <StyledTabs
-          value={value}
-          onChange={handleChange}
-          variant="fullWidth"
-        >
-          <StyledTab label="Mjesecno" {...a11yProps(0)}/>
-          <StyledTab label="Od-Do" {...a11yProps(1)}/>
-        </StyledTabs>
-        <TabPanel value={value} index={0}>
-          <Stack>
-            <Box marginTop={1}>
-              <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
-                <MobileDatePicker
-                  views={['year', 'month']}
-                  className="aaa"
-                  color="secondary"
-                  label="Datum"
-                  inputFormat="MM/yyyy"
-                  minDate={new Date('2008-01-01')}
-                  maxDate={new Date('2050-01-01')}
-                  value={datumFilter}
-                  onChange={setDatumFilter}
-                  renderInput={(params) => <TextField color="primary" {...params} />}
-                />
-              </LocalizationProvider>
-            </Box>
-            <Box width='100%' textAlign='right' > <Button variant="contained" onClick={handleFiltriraj}>Filtriraj</Button> </Box>
-          </Stack>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Stack>
-            <Box marginTop={1}>
-              <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
-                <Stack direction='row' alignItems='center' spacing={1}>
+          <StyledTabs
+            value={value}
+            onChange={handleChange}
+            variant="fullWidth"
+          >
+            <StyledTab label="Mjesecno" {...a11yProps(0)}/>
+            <StyledTab label="Od-Do" {...a11yProps(1)}/>
+          </StyledTabs>
+          <TabPanel value={value} index={0}>
+            <Stack>
+              <Box marginTop={1}>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
                   <MobileDatePicker
-                    label="Od"
-                    inputFormat="dd/MM/yyyy"
-                    minDate={new Date('2008-01-01')}
-                    maxDate={new Date('2050-01-01')} 
-                    value={datumOdFilter}
-                    onChange={setDatumOdFilter}
-                    renderInput={(params) => <TextField style={{ width: '110px' }} color="primary" {...params} />}
-                  />
-                  <Typography variant="h5">-</Typography>
-                  <MobileDatePicker
-                    label="Do"
-                    inputFormat="dd/MM/yyyy"
+                    views={['year', 'month']}
+                    className="aaa"
+                    color="secondary"
+                    label="Datum"
+                    inputFormat="MM/yyyy"
                     minDate={new Date('2008-01-01')}
                     maxDate={new Date('2050-01-01')}
-                    value={datumDoFilter}
-                    onChange={setDatumDoFilter}
-                    renderInput={(params) => <TextField style={{ width: '110px' }} color="primary" {...params} />}
+                    value={datumFilter}
+                    onChange={setDatumFilter}
+                    renderInput={(params) => <TextField color="primary" {...params} />}
                   />
-                </Stack>
-              </LocalizationProvider>
-            </Box>
-            <Box width='100%' textAlign='right' > <Button variant="contained" onClick={handleFiltrirajOdDo}>Filtriraj</Button> </Box>
-          </Stack>
-        </TabPanel>
+                </LocalizationProvider>
+              </Box>
+              <Box width='100%' textAlign='right' > <Button variant="contained" onClick={handleFiltriraj}>Filtriraj</Button> </Box>
+            </Stack>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Stack>
+              <Box marginTop={1}>
+                <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
+                  <Stack direction='row' alignItems='center' spacing={1}>
+                    <MobileDatePicker
+                      label="Od"
+                      inputFormat="dd/MM/yyyy"
+                      minDate={new Date('2008-01-01')}
+                      maxDate={new Date('2050-01-01')} 
+                      value={datumOdFilter}
+                      onChange={setDatumOdFilter}
+                      renderInput={(params) => <TextField style={{ width: '110px' }} color="primary" {...params} />}
+                    />
+                    <Typography variant="h5">-</Typography>
+                    <MobileDatePicker
+                      label="Do"
+                      inputFormat="dd/MM/yyyy"
+                      minDate={new Date('2008-01-01')}
+                      maxDate={new Date('2050-01-01')}
+                      value={datumDoFilter}
+                      onChange={setDatumDoFilter}
+                      renderInput={(params) => <TextField style={{ width: '110px' }} color="primary" {...params} />}
+                    />
+                  </Stack>
+                </LocalizationProvider>
+              </Box>
+              <Box width='100%' textAlign='right' > <Button variant="contained" onClick={handleFiltrirajOdDo}>Filtriraj</Button> </Box>
+            </Stack>
+          </TabPanel>
         </AccordionDetails>
       </Accordion>
-
+      </Box>
       {Object.keys(zTure).map((zT) => {
         return (
           <DropDownWrap key={zT} titleChildren={<Typography style={{ margin: '0', padding: '0' }}>{zT}</Typography>}>
-            <ZavrseneTureLista zTure={zTure[zT]} handleOpenDetalji={handleOpenDetalji} />
+            <ZavrseneTureLista zTure={zTure[zT]} zTureDatumId={zT} handleOpenDetalji={handleOpenDetalji} />
           </DropDownWrap>
         );
       })}
-      <NovaZTuraPopupForma />
+      <NovaZTuraPopupForma isOpen={isOpenForma} setIsOpenForma={setIsOpenForma}/>
       <DetaljiZavrseneTurePopup isOpen={isDetaljiOpen} handleClose={handleCloseDetalji} />
     </Paper>
   );

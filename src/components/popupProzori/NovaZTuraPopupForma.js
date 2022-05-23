@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Fab,
   IconButton,
   List,
   ListItem,
@@ -44,6 +45,7 @@ import hrLocale from 'date-fns/locale/hr';
 import { Box } from '@mui/system';
 import DropDownWrap from '../DropDownWrap.js';
 import { Timestamp } from 'firebase/firestore';
+import AddIcon from '@mui/icons-material/Add';
 
 const StyledTextareaAutosize = styled((props) => <TextareaAutosize {...props} />)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -143,9 +145,13 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
+//TODO: loading spiner kad se dodaje tura
+//      popravit razmake na popupima izmedju dropdown menia
+
+function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
+  
   const { theme } = useContext(GlobalContext);
-  const { vrsteTura, vodici, quadovi, vrsteQuadova, handleNewZTura, handleSetRaspon } = useContext(TureContext);
+  const { vrsteTura, vodici, quadovi, vrsteQuadova, handleNewZTura } = useContext(TureContext);
 
   const title = {
     0: 'Izrada ture',
@@ -168,9 +174,13 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  useEffect(() => {
+  const resetChecked = () => {
     const temp = quadovi.map((q) => [q.id, false]);
     setChecked(Object.fromEntries(temp));
+  }
+
+  useEffect(() => {
+    resetChecked();
   }, [quadovi]);
 
   const handleStep1 = () => {
@@ -197,7 +207,17 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
 
   const handleStep3 = () => {
     console.log(novaeNapomene)
-    handleNewZTura(novaZTura, novaeNapomene);
+    handleNewZTura(novaZTura, novaeNapomene).then(() => {
+      setIsOpenForma(false);
+      resetChecked();
+      resetSelectedVTure();
+      resetSelectedVodic();
+      resetNazivTure();
+      setBrSuvozaca(0);
+      setVrijemePocetka(new Date());
+      setVrijemeZavrsetka(new Date());
+      setStep(0);
+    });
   };
 
   const handleStepBack = () => {
@@ -321,7 +341,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
         </ValidatorForm>
       </StyledDialogContent>
       <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>
-        <Button variant="text" style={{ marginRight: '10px' }} onClick={handleClose}>
+        <Button variant="text" style={{ marginRight: '10px' }} onClick={() => setIsOpenForma(false)}>
           Odustani
         </Button>
         <Button type="submit" form="zTuraS1" variant="contained">
@@ -458,7 +478,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
         fullScreen={fullScreen}
         fullWidth={true}
         maxWidth="sm"
-        onClose={handleClose}
+        onClose={() => setIsOpenForma(false)}
         open={isOpen}
       >
         <DialogTitle
@@ -481,7 +501,7 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
           </Stepper>
           <IconButton
             aria-label="close"
-            onClick={handleClose}
+            onClick={() => setIsOpenForma(false)}
             sx={{
               position: 'absolute',
               right: 8,
@@ -494,6 +514,19 @@ function NovaZTuraPopupForma({ handleClose, isOpen = false }) {
         </DialogTitle>
         {stepContent[step]}
       </Dialog>
+      <Fab
+        color="secondary"
+        aria-label="add"
+        sx={{
+          position: 'fixed',
+          color: `${theme.palette.mode === 'dark' ? 'common.black' : 'common.white'}`,
+          bottom: 16,
+          right: 16,
+        }}
+        onClick={() => setIsOpenForma(true)}
+      >
+        <AddIcon />
+      </Fab>
     </>
   );
 }

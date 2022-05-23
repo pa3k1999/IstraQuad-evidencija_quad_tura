@@ -1,8 +1,8 @@
 import { ThemeProvider } from '@emotion/react';
 import './App.css';
 import { GlobalContext } from './contexts/GlobalContext';
-import { memo, useContext} from 'react';
-import { Paper } from '@mui/material';
+import { cloneElement, memo, useContext} from 'react';
+import { Container, Paper, Toolbar, useScrollTrigger } from '@mui/material';
 import { Box } from '@mui/system';
 import QuadoviPage from './QuadoviPage';
 import { VrsteQuadovaProvider } from './contexts/VrsteQuadovaContext';
@@ -17,70 +17,102 @@ import ErrorPage from './ErrorPage';
 import adminsUIDs from './adminsUIDs';
 import VodiciPage from './VodiciPage';
 import { VodiciProvider } from './contexts/VodiciContext';
+import styled from '@emotion/styled';
 
 //TODO: napraviti provjere brisanja i zabrane
 //      napraviti pregled profila i uredjivanje podataka
 //      napraviti pregled quadova (koliko odradjenih tura i sve napomene)
 //      napraviti backend radi brisanja korisnika i auto logouta
 
+const StyledPaper = styled((props) => <Paper {...props} />)(
+  ({ theme }) => ({
+    overflowY:'scroll',
+    MsOverflowStyle: 'none',
+    scrollbarWidth: 'none',
+    "&::-webkit-scrollbar": {
+      display: 'none',
+    }
+   
+  }),
+);
+
+function ElevationScroll(props) {
+  const { children, window } = props;
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+    target: window ? window() : undefined,
+  });
+
+  return cloneElement(children, {
+    elevation: trigger ? 4 : 0,
+  });
+}
+
 function App() {
-  const { theme, auth} = useContext(GlobalContext);
+  const { theme, auth} = useContext(GlobalContext);   
 
   return (
     <ThemeProvider theme={theme}>
-      <Paper elevation={0} style={{ height: '100vh' }} square={true}>
+      <>
+        <ElevationScroll>
         <NavBar />
-        <Box style={{ paddingTop: '100px' }} square={true}>
-          <Routes>
-            <Route exact path="/" element={<p> pipi pupu </p>} />
-            <Route
-              exact
-              path="/vrste-quadova"
-              element={
-                auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
-                  <VrsteQuadovaProvider>
-                    <VrsteQuadovaPage />
-                  </VrsteQuadovaProvider>
-                ) : (
-                  <ErrorPage />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/quadovi"
-              element={
-                auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
-                  <QuadoviProvider>
-                    <QuadoviPage />
-                  </QuadoviProvider>
-                ) : (
-                  <ErrorPage />
-                )
-              }
-            />
-            <Route
-              exact
-              path="/zavrsene-ture"
-              element={
-                <TureProvider>
-                  <ZavrseneTurePage />
-                </TureProvider>
-              }
-            />
-            <Route
-              exact
-              path="/vodici"
-              element={
-                <VodiciProvider>
-                  <VodiciPage/>
-                </VodiciProvider>
-              }
-            />
-            <Route exact path="/prijava" element={<LogInPage />} />
-          </Routes>
-        </Box>
-      </Paper>
+        </ElevationScroll>
+          <StyledPaper elevation={0} style={{height: '100vh',  display: 'flex', flexFlow: 'column'}}>
+            <Toolbar sx={{marginBottom: 3, flex: '0 1 auto'}}/>
+            <div style={{flex: '1 1 auto'}}>
+              <Routes>
+              <Route exact path="/" element={<p> pipi pupu </p>} />
+              <Route
+                exact
+                path="/vrste-quadova"
+                element={
+                  auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                    <VrsteQuadovaProvider>
+                      <VrsteQuadovaPage />
+                    </VrsteQuadovaProvider>
+                  ) : (
+                    <ErrorPage />
+                  )
+                }
+              />
+              <Route
+                exact
+                path="/quadovi"
+                element={
+                  auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                    <QuadoviProvider>
+                      <QuadoviPage />
+                    </QuadoviProvider>
+                  ) : (
+                    <ErrorPage />
+                  )
+                }
+              />
+              <Route
+                exact
+                path="/zavrsene-ture"
+                element={
+                  <TureProvider>
+                    <ZavrseneTurePage />
+                  </TureProvider>
+                }
+              />
+              <Route
+                exact
+                path="/vodici"
+                element={
+                  <VodiciProvider>
+                    <VodiciPage/>
+                  </VodiciProvider>
+                }
+              />
+              <Route exact path="/prijava" element={<LogInPage />} />
+            </Routes>
+            </div>
+            
+          </StyledPaper>
+        </>
     </ThemeProvider>
   );
 }
