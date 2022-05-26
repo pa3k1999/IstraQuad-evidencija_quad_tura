@@ -7,10 +7,12 @@ import { IconButton, Stack, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { QuadoviContext } from '../contexts/QuadoviContext';
+import { useNavigate } from 'react-router-dom';
 
 const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handleOpenDelete }) {
 
   const { setSelectedQuad } = useContext(QuadoviContext);
+  const navigate = useNavigate();
   
   const handleEdit = () => {
     setSelectedQuad(quad);
@@ -40,7 +42,7 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handle
           height: '54px',
         }}
       >
-        <ListItemButton style={{ padding: '0', paddingLeft: '10px' }}>
+        <ListItemButton style={{ padding: '0', paddingLeft: '10px' }} onClick={() => navigate(`/quad/${quad.id}`)}>
           <Stack justifyContent="center" alignItems="flex-start" spacing={0} style={{ paddingBottom: '5px' }}>
             <Typography variant="subtitle1" gutterBottom component="div" margin={0}>
               {quad.naziv}

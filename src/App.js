@@ -2,7 +2,7 @@ import { ThemeProvider } from '@emotion/react';
 import './App.css';
 import { GlobalContext } from './contexts/GlobalContext';
 import { cloneElement, memo, useContext} from 'react';
-import { Container, Paper, Toolbar, useScrollTrigger } from '@mui/material';
+import { Button, Container, Paper, Toolbar, useScrollTrigger } from '@mui/material';
 import { Box } from '@mui/system';
 import QuadoviPage from './QuadoviPage';
 import { VrsteQuadovaProvider } from './contexts/VrsteQuadovaContext';
@@ -18,6 +18,9 @@ import adminsUIDs from './adminsUIDs';
 import VodiciPage from './VodiciPage';
 import { VodiciProvider } from './contexts/VodiciContext';
 import styled from '@emotion/styled';
+import axios from 'axios';
+import KorisnikPage from './KorisnikPage';
+import QuadInfoPage from './QuadInfoPage';
 
 //TODO: napraviti provjere brisanja i zabrane
 //      napraviti pregled profila i uredjivanje podataka
@@ -32,7 +35,6 @@ const StyledPaper = styled((props) => <Paper {...props} />)(
     "&::-webkit-scrollbar": {
       display: 'none',
     }
-   
   }),
 );
 
@@ -51,6 +53,16 @@ function ElevationScroll(props) {
 
 function App() {
   const { theme, auth} = useContext(GlobalContext);   
+
+  // const get = () => {auth.currentUser.getIdToken(false).then(function(idToken) {
+  //   axios.get('http://localhost:4000/server', {
+  //     headers: {
+  //       authtoken: `${idToken}`
+  //     },
+  //   }).then(res => console.log(new Date(res.data.exp*1000)))
+  //   })
+  // }
+  
 
   return (
     <ThemeProvider theme={theme}>
@@ -107,11 +119,34 @@ function App() {
                   </VodiciProvider>
                 }
               />
+              <Route
+                exact
+                path="/vodic/:uid"
+                element={
+                  auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                    <KorisnikPage/>
+                  ) : (
+                    <ErrorPage />
+                  )
+                }
+              />
+              <Route
+                exact
+                path="/quad/:id"
+                element={
+                  auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                    <QuadInfoPage/>
+                  ) : (
+                    <ErrorPage />
+                  )
+                }
+              />
               <Route exact path="/prijava" element={<LogInPage />} />
             </Routes>
             </div>
-            
+            {/* <Button onClick={get}>geeeet</Button> */}
           </StyledPaper>
+          
         </>
     </ThemeProvider>
   );

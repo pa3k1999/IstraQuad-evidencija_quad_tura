@@ -25,6 +25,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GlobalContext } from '../contexts/GlobalContext.js';
 import GroupIcon from '@mui/icons-material/Group';
 import adminsUIDs from '../adminsUIDs'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const StyledSwipeableDrawer = styled((props) => <SwipeableDrawer {...props} />)(({ theme }) => ({
   '& div.MuiDrawer-paperAnchorLeft': {
@@ -102,6 +103,14 @@ function NavBar() {
           <List>
           {auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? 
           <>
+            <ListItem disablePadding> 
+              <ListItemButton onClick={() => handleNavigate(`/vodic/${auth.currentUser.uid}`)}>
+                <ListItemIcon>
+                  <AccountCircleIcon sx={{ color: 'primary.contrastText' }} />
+                </ListItemIcon>
+                <ListItemText primary="Profil" />
+              </ListItemButton>
+            </ListItem>
             <ListItem disablePadding> 
               <ListItemButton onClick={() => handleNavigate(`/vrste-quadova`)}>
                 <ListItemIcon>
