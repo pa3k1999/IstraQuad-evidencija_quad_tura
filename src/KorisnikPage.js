@@ -64,9 +64,9 @@ function KorisnikPage() {
       const setup = async() => {
         const tureTemp = await getTure(uid);
         setTure(tureTemp);
-        const vrsteQuadovaTemp = await getVrsteTura();
-        setVrsteTura(vrsteQuadovaTemp);
-        setUkupnoVrijeme(tureTemp.reduce((sum, t)=> sum + vrsteQuadovaTemp.find((vT) => vT.id === t.vrstaTureId).minute, 0))
+        const vrsteTuraTemp = await getVrsteTura();
+        setVrsteTura(vrsteTuraTemp);
+        setUkupnoVrijeme(tureTemp.reduce((sum, t)=> sum + vrsteTuraTemp.find((vT) => vT.id === t.vrstaTureId).minute, 0))
       }
       setup();
 

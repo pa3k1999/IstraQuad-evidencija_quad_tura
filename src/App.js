@@ -21,6 +21,7 @@ import styled from '@emotion/styled';
 import axios from 'axios';
 import KorisnikPage from './KorisnikPage';
 import QuadInfoPage from './QuadInfoPage';
+import StatistikaPage from './StatistikaPage';
 
 //TODO: napraviti provjere brisanja i zabrane
 //      napraviti pregled profila i uredjivanje podataka
@@ -136,6 +137,17 @@ function App() {
                 element={
                   auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
                     <QuadInfoPage/>
+                  ) : (
+                    <ErrorPage />
+                  )
+                }
+              />
+              <Route
+                exact
+                path="/statistika"
+                element={
+                  auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? (
+                    <StatistikaPage/>
                   ) : (
                     <ErrorPage />
                   )

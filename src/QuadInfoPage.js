@@ -1,10 +1,15 @@
-import { Avatar, Box, Stack, Typography } from '@mui/material';
+import { Avatar, Box, List, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import TabWrap from './components/TabWrap';
 import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 import db from './firebase.config';
 import { useParams } from 'react-router-dom';
 import NapomenaQuadaListItem from './components/NapomenaQuadaListItem';
+import styled from '@emotion/styled';
+
+const StyledStack = styled((props) => <Stack direction="column" justifyContent="center" alignItems="center" spacing={0} {...props} />)(({ theme }) => ({
+  margin: '10px 0', 
+}));
 
 const getBoja = async (vrstaQuadaId) => {
   const refVq = await getDoc(doc(db, 'vrsteQuadova', vrstaQuadaId));
@@ -47,6 +52,15 @@ const getNapomene = async(id) => {
   return array;
 };
 
+const getVrsteTura = async() => {
+  let data = [];
+  const querySnapshot = await getDocs(collection(db, 'vrsteTura'));
+  querySnapshot.forEach((doc) => {
+    data.push({ id: doc.id, ...doc.data() });
+  });
+  return data;
+};
+
 function QuadInfoPage() {
 
   const { id } = useParams();
@@ -55,6 +69,7 @@ function QuadInfoPage() {
   const [tureQuada, setTureQuada] = useState([]);
   const [napomeneQuad, setNapomeneQuad] = useState([]);
 
+  const [ukupnoVrijeme, setUkupnoVrijeme] = useState(0);
   const [isLoadingQuad, setIsLoadingQuad] = useState(true);
   const [isLoadingNapomene, setIsLoadingNapomene] = useState(true);
 
@@ -65,15 +80,16 @@ function QuadInfoPage() {
       })
       getTure(id).then(tureTemp => {
         setTureQuada(tureTemp);
-        getNapomene(id).then(napomeneTemp => {
-          setNapomeneQuad(napomeneTemp);
+        getNapomene(id).then(async(napomeneTemp) => {
+          const napomeneFilterTemp = napomeneTemp.sort((a, b) => tureTemp.find(t => t.id === b.turaId).vrijemePocetka - tureTemp.find(t => t.id === a.turaId).vrijemePocetka)
+          setNapomeneQuad(napomeneFilterTemp);
           setIsLoadingNapomene(false);
+          const vrsteQuadovaTemp = await getVrsteTura();
+          setUkupnoVrijeme(tureTemp.reduce((sum, t)=> sum + vrsteQuadovaTemp.find((vT) => vT.id === t.vrstaTureId).minute, 0))
       })})
 
     console.log('--Fetching data from firebase (korisnik)--');
   }, []);
-
-  //TODO: dodati broj odradjenih tura i mozd provedenih sati na turama...
 
   return (
     <TabWrap
@@ -97,12 +113,33 @@ function QuadInfoPage() {
       }
     >
       <Box>
-        {isLoadingNapomene ? '' : (
-          napomeneQuad.map(n => {
-            const tura = tureQuada.find(t => t.id === n.turaId);
-            return <NapomenaQuadaListItem nazivTure={tura.naziv} datum={tura.vrijemePocetka.toDate()} napomena={n.napomena}/>
-          })
-        )}
+        <Stack direction='row' justifyContent="space-evenly" sx={{width: '100%'}}>
+          <StyledStack>
+            <Typography variant="subtitle1">
+              broj tura
+            </Typography>
+            <Typography variant="h5">
+              {tureQuada.length}
+            </Typography>
+          </StyledStack>
+          <StyledStack>
+            <Typography variant="subtitle1">
+              sati na turama
+            </Typography>
+            <Typography variant="h5">
+            {Math.trunc(ukupnoVrijeme / 60)}h
+            </Typography>
+          </StyledStack>
+        </Stack>
+        
+        <List style={{ padding: '0' }} dense={true}>
+          {isLoadingNapomene ? '' : (
+            napomeneQuad.map(n => {
+              const tura = tureQuada.find(t => t.id === n.turaId);
+              return <NapomenaQuadaListItem key={n.id} nazivTure={tura.naziv} datum={tura.vrijemePocetka.toDate()} napomena={n.napomena}/>
+            })
+          )}
+        </List>
       </Box>
     </TabWrap>
   )

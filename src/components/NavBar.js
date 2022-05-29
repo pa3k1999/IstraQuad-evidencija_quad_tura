@@ -26,6 +26,7 @@ import { GlobalContext } from '../contexts/GlobalContext.js';
 import GroupIcon from '@mui/icons-material/Group';
 import adminsUIDs from '../adminsUIDs'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 
 const StyledSwipeableDrawer = styled((props) => <SwipeableDrawer {...props} />)(({ theme }) => ({
   '& div.MuiDrawer-paperAnchorLeft': {
@@ -140,7 +141,15 @@ function NavBar() {
                 <ListItemIcon>
                   <FormatListBulletedIcon sx={{ color: 'primary.contrastText' }} />
                 </ListItemIcon>
-                <ListItemText primary="zavrsene ture" />
+                <ListItemText primary="Zavrsene ture" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding> 
+              <ListItemButton onClick={() => handleNavigate(`/statistika`)}>
+                <ListItemIcon>
+                  <ShowChartIcon sx={{ color: 'primary.contrastText' }} />
+                </ListItemIcon>
+                <ListItemText primary="Statistika" />
               </ListItemButton>
             </ListItem>
             </> :
