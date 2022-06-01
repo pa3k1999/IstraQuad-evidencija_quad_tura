@@ -10,7 +10,7 @@ function TabWrap({title, children}) {
     
     <Paper
       elevation={4}
-      style={{ maxWidth: '700px', margin: 'auto', borderRadius: '15px', overflow: 'hidden' }}
+      style={{ maxWidth: '1000px', margin: 'auto', borderRadius: '15px', overflow: 'hidden' }}
     >
       <Box style={{backgroundColor: theme.palette.primary.main, minHeight: '32px', color: 'white', padding: '10px 20px'}}>
         {title}   

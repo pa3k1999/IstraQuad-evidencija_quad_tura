@@ -1,1 +1,1 @@
-export default ['KjO0lsDd0kUEtnUN8nOx1aA6OD93']
+export default ['KjO0lsDd0kUEtnUN8nOx1aA6OD93', 'cVZ9CwihL5ObqB8hE0xLjnTyGCl1']

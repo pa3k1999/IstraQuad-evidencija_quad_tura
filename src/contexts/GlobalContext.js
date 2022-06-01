@@ -16,7 +16,7 @@ const theme = unstable_createMuiStrictModeTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: red[500],
+      main: red[600],
     },
     secondary: {
       main: amber[500],

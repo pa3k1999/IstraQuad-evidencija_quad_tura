@@ -111,7 +111,7 @@ const CustomTooltipSve = ({ active, payload, label, data, isSati }) => {
     return (
       <Paper elevation={5} sx={{ minWidth: '50px', padding: '0 5px' }}>
         <Typography padding={1} paddingBottom={0}>
-          {data[label].datum}
+          {data[label] ? data[label].datum : ''}
         </Typography>
         <Typography padding={1} color={payload[0].color}>
           {isSati ? 'Ukupno sati: ' : 'Br. tura: '}

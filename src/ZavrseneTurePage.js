@@ -134,7 +134,7 @@ function ZavrseneTurePage() {
     if(Object.values(zTure)[0]){
       var dateArray = new Array();
       const length = Object.keys(zTure).length;
-      console.log( Object.values(zTure)[length-1][0])
+      console.log( Object.values(zTure)[length-1])
       const stopDateRaw = Object.values(zTure)[length-1][0].vrijemePocetka.toDate();
       const stopDate = new Date(stopDateRaw.getFullYear(), stopDateRaw.getMonth(), stopDateRaw.getDate(), 0, 0, 0);
       const startDateRaw = Object.values(zTure)[0][0].vrijemePocetka.toDate();
@@ -178,7 +178,7 @@ function ZavrseneTurePage() {
 
   return (
     <>
-      <Paper elevation={4} style={{ maxWidth: '700px', margin: 'auto', borderRadius: '15px', overflow: 'hidden', marginBottom: '25px' }}>
+      <Paper elevation={4} style={{ maxWidth: '1000px', margin: 'auto', borderRadius: '15px', overflow: 'hidden', marginBottom: '25px' }}>
         <ResponsiveContainer width='100%' height={150}>
           <AreaChart data={data} margin={{top: 5, right: 0, left: 0, bottom: 0}}>
             <Area dataKey="ture" type="monotone" stroke={theme.palette.primary.main} fill={theme.palette.primary.light}/>
@@ -186,7 +186,7 @@ function ZavrseneTurePage() {
           </AreaChart>
         </ResponsiveContainer>
       </Paper>
-      <Paper elevation={4} style={{ maxWidth: '700px', margin: 'auto', borderRadius: '15px', overflow: 'hidden' }}>
+      <Paper elevation={4} style={{ maxWidth: '1000px', margin: 'auto', borderRadius: '15px', overflow: 'hidden' }}>
         <Box style={{backgroundColor: theme.palette.primary.main, minHeight: '32px', padding: '10px 20px'}}>
         <Accordion style={{backgroundColor: theme.palette.primary.main, border: 'none'}}>
           <AccordionSummary

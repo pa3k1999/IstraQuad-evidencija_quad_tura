@@ -22,9 +22,13 @@ import axios from 'axios';
 import KorisnikPage from './KorisnikPage';
 import QuadInfoPage from './QuadInfoPage';
 import StatistikaPage from './StatistikaPage';
+import HomePage from './HomePage';
 
 //TODO: napraviti provjere brisanja i zabrane
 //      napraviti pregled profila i uredjivanje podataka
+//      loading za dodavanje zTura
+//      potvrda brisanja zTura
+//      loading podataka za sve (restrukturirat kako se podatci dobivaju iz firebasea)
 //      napraviti pregled quadova (koliko odradjenih tura i sve napomene)
 //      napraviti backend radi brisanja korisnika i auto logouta
 
@@ -55,13 +59,12 @@ function ElevationScroll(props) {
 function App() {
   const { theme, auth} = useContext(GlobalContext);   
 
-  // const get = () => {auth.currentUser.getIdToken(false).then(function(idToken) {
-  //   axios.get('http://localhost:4000/server', {
+  // const get = () => {
+  //   axios.get('http://localhost:4000/novi-user-convert', {
   //     headers: {
-  //       authtoken: `${idToken}`
+  //       uid: 'KjO0lsDd0kUEtnUN8nOx1aA6OD93'
   //     },
-  //   }).then(res => console.log(new Date(res.data.exp*1000)))
-  //   })
+  //   }).then(res =>console.log(res))
   // }
   
 
@@ -75,7 +78,9 @@ function App() {
             <Toolbar sx={{marginBottom: 3, flex: '0 1 auto'}}/>
             <div style={{flex: '1 1 auto'}}>
               <Routes>
-              <Route exact path="/" element={<p> pipi pupu </p>} />
+              <Route exact path="/" element={
+                <HomePage/>
+              } />
               <Route
                 exact
                 path="/vrste-quadova"

@@ -2,6 +2,8 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getDataF, handleDeleteeDataF, handleNewDataF, handleUpdateDataF } from './firestoreFunkcije';
 import { GlobalContext } from './GlobalContext';
+import { deleteUser } from "firebase/auth";
+import axios from 'axios';
 
 export const VodiciContext = createContext();
 
@@ -19,14 +21,15 @@ export function VodiciProvider({ children }) {
   }, []);
 
   const handleNewDataVodic = async (data, userData) => {
-    await createUserWithEmailAndPassword(auth, userData.eMail, userData.lozinka)
-  .then(async(userCredential) => {
-    const user = userCredential.user;
-    await handleNewDataF(data, 'vodici', user.uid, vodici, setVodici);
-  })
-  .catch((error) => {
-    console.log(error)
-  });
+    await axios.get('http://localhost:4000/novi-user', {
+      headers: {
+        email: `${userData.eMail}`,
+        lozinka: `${userData.lozinka}`
+      },
+    }).then(res => {
+      const user = res.data;
+      handleNewDataF(data, 'vodici', user.uid, vodici, setVodici);
+    })
   }
 
   const handleUpdateDataVodic = async (data, id) => {
@@ -34,7 +37,16 @@ export function VodiciProvider({ children }) {
   };
 
   const handleDeleteeDataVodic = async (id) => {
-    await handleDeleteeDataF('vodici', id, vodici, setVodici);
+    await axios.delete('http://localhost:4000/obrisi-vodica', {
+      headers: {
+        uid: `${id}`
+      },
+    }).then(async(res) => {
+      if(res.data){
+        await handleDeleteeDataF('vodici', id, vodici, setVodici);
+      }
+    });
+    
   };
 
   return <VodiciContext.Provider value={{ selectedVodici, setSelectedVodici, handleNewDataVodic, handleUpdateDataVodic, handleDeleteeDataVodic, vodici }}>{children}</VodiciContext.Provider>;

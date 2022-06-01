@@ -26,7 +26,16 @@ const deleteZTura = async (id, datumId, zTure, setZTure) => {
     queryRef.forEach((d) => {
       deleteDoc(doc(db, 'napomene', d.id));
     });
-    setZTure({...zTure, [datumId]: zTure[datumId].filter(zT => zT.id !== id)});
+    const filterdTure = zTure[datumId].filter(zT => zT.id !== id);
+    console.log(filterdTure.length)
+    if(filterdTure.length === 0){
+      let tempZTure = {...zTure};
+      delete tempZTure[datumId];
+      setZTure({...tempZTure});
+    } else {
+      setZTure({...zTure, [datumId]: filterdTure});
+    }
+    
     console.log('Tura obrisana.');
   } catch (e) {
     console.error('Error deliting document: ', e);
@@ -99,6 +108,7 @@ const handleNewZTuraF = async (NovaZTura, napomene, zTure, setZTure, rasponDatum
     console.error('Error adding document: ', e);
   }
 };
+
 export function TureProvider({ children }) {
   const [selectedZTura, setSelectedZTura] = useState({
     id: '',

@@ -109,8 +109,8 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
               style={{ width: '300px' }}
               value={iIme}
               onChange={changeIIme}
-              validators={['isEmpty', 'isNazivUsed']}
-              errorMessages={['Nesmije bit prazno', 'Naziv vec postoji']}
+              validators={['isEmpty']}
+              errorMessages={['Nesmije bit prazno']}
               helperText=" "
             />
             <TextValidator

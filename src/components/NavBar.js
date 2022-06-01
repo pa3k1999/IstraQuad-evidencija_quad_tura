@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
+  Collapse,
   Divider,
   List,
   ListItem,
@@ -27,6 +28,13 @@ import GroupIcon from '@mui/icons-material/Group';
 import adminsUIDs from '../adminsUIDs'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
+import HomeIcon from '@mui/icons-material/Home';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import TopicIcon from '@mui/icons-material/Topic';
+import SportsScoreIcon from '@mui/icons-material/SportsScore';
 
 const StyledSwipeableDrawer = styled((props) => <SwipeableDrawer {...props} />)(({ theme }) => ({
   '& div.MuiDrawer-paperAnchorLeft': {
@@ -47,11 +55,16 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 function NavBar() {
   const { theme, auth } = useContext(GlobalContext);
 
+  const [isOpen, setIsOpen] = useState(false);
   const [isSBOpen, setIsSBOpen] = useState(false);
   const navigate = useNavigate();
   const handleNavigate = (location) => {
     navigate(location);
     setIsSBOpen(false);
+  };
+
+  const handleClick = () => {
+    setIsOpen(!isOpen);
   };
 
   const handleOdjava = async() => {
@@ -102,8 +115,7 @@ function NavBar() {
           </DrawerHeader>
           <Divider />
           <List>
-          {auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? 
-          <>
+          {auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? <>
             <ListItem disablePadding> 
               <ListItemButton onClick={() => handleNavigate(`/vodic/${auth.currentUser.uid}`)}>
                 <ListItemIcon>
@@ -112,38 +124,85 @@ function NavBar() {
                 <ListItemText primary="Profil" />
               </ListItemButton>
             </ListItem>
+            </> :
+            <></>}
+          {auth.currentUser ? <>
             <ListItem disablePadding> 
-              <ListItemButton onClick={() => handleNavigate(`/vrste-quadova`)}>
+              <ListItemButton onClick={handleOdjava}>
                 <ListItemIcon>
-                  <FormatListBulletedIcon sx={{ color: 'primary.contrastText' }} />
+                  <LogoutIcon sx={{ color: 'primary.contrastText' }} />
                 </ListItemIcon>
-                <ListItemText primary="Vrste quadova" />
+                <ListItemText primary="LogOut" />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => handleNavigate(`/quadovi`)}>
-                <ListItemIcon>
-                  <SvgIcon sx={{ color: 'primary.contrastText' }}>{atvIcon}</SvgIcon>
-                </ListItemIcon>
-                <ListItemText primary="Quadovi" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => handleNavigate(`/vodici`)}>
-                <ListItemIcon>
-                  <GroupIcon sx={{ color: 'primary.contrastText' }}/>
-                </ListItemIcon>
-                <ListItemText primary="Vodic" />
-              </ListItemButton>
-            </ListItem>
+          </> : <>
             <ListItem disablePadding> 
-              <ListItemButton onClick={() => handleNavigate(`/zavrsene-ture`)}>
+              <ListItemButton onClick={() => handleNavigate(`/prijava`)}>
                 <ListItemIcon>
-                  <FormatListBulletedIcon sx={{ color: 'primary.contrastText' }} />
+                  <LoginIcon sx={{ color: 'primary.contrastText' }} />
                 </ListItemIcon>
-                <ListItemText primary="Zavrsene ture" />
+                <ListItemText primary="Login" />
               </ListItemButton>
             </ListItem>
+          </>}
+          <Divider variant="middle" />
+
+          <ListItem disablePadding> 
+            <ListItemButton onClick={() => handleNavigate(`/`)}>
+              <ListItemIcon>
+                <HomeIcon sx={{ color: 'primary.contrastText' }} />
+              </ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItemButton>
+          </ListItem>
+
+          {auth.currentUser && adminsUIDs.includes(auth.currentUser.uid) ? <>
+            <Divider variant="middle" />
+            <ListItemButton onClick={handleClick}>
+              <ListItemIcon>
+                <TopicIcon sx={{ color: 'primary.contrastText' }}/>
+              </ListItemIcon>
+              <ListItemText primary="Podatci" />
+              {isOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Divider variant="middle" />
+            <Collapse in={isOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem disablePadding> 
+                  <ListItemButton onClick={() => handleNavigate(`/vrste-quadova`)}>
+                    <ListItemIcon>
+                      <FormatListBulletedIcon sx={{ color: 'primary.contrastText' }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Vrste quadova" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => handleNavigate(`/quadovi`)}>
+                    <ListItemIcon>
+                      <SvgIcon sx={{ color: 'primary.contrastText' }}>{atvIcon}</SvgIcon>
+                    </ListItemIcon>
+                    <ListItemText primary="Quadovi" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => handleNavigate(`/vodici`)}>
+                    <ListItemIcon>
+                      <GroupIcon sx={{ color: 'primary.contrastText' }}/>
+                    </ListItemIcon>
+                    <ListItemText primary="Vodic" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding> 
+                  <ListItemButton onClick={() => handleNavigate(`/zavrsene-ture`)}>
+                    <ListItemIcon>
+                      <SportsScoreIcon sx={{ color: 'primary.contrastText' }} />
+                    </ListItemIcon>
+                    <ListItemText primary="Zavrsene ture" />
+                  </ListItemButton>
+                </ListItem>
+                <Divider variant="middle" />
+              </List>
+            </Collapse>
             <ListItem disablePadding> 
               <ListItemButton onClick={() => handleNavigate(`/statistika`)}>
                 <ListItemIcon>
