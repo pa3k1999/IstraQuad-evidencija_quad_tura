@@ -1,12 +1,7 @@
 import { unstable_createMuiStrictModeTheme } from '@mui/material';
 import { amber, red, yellow } from '@mui/material/colors';
 import React, { createContext, useState } from 'react';
-import {
-  collection,
-  getDocs,
-  where,
-  query,
-} from 'firebase/firestore';
+import { collection, getDocs, where, query } from 'firebase/firestore';
 import db from '../firebase.config';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
@@ -42,16 +37,23 @@ const getUserEmail = async (korisnickoIme) => {
 
 export function GlobalProvider({ children }) {
   const auth = getAuth();
+  const [stariUser, setStariUser] = useState(false);
+  const [userClaims, setUserClaims] = useState(false);
   const [isLogiran, setIsLogiran] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      setIsLogiran(true);
+    if (user && user !== stariUser) {
+      user.getIdTokenResult().then((idTokenResult) => {
+        setIsLogiran(true);
+        setStariUser(user);
+        setUserClaims(idTokenResult.claims);
+      })
+      
     } else {
       setIsLogiran(false);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   });
 
   return (
@@ -60,7 +62,8 @@ export function GlobalProvider({ children }) {
         theme,
         getUserEmail,
         auth,
-        isLogiran
+        isLogiran,
+        userClaims
       }}
     >
       {isLoading ? <p>Loading...</p> : children}

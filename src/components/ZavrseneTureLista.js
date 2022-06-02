@@ -1,4 +1,4 @@
-import React, { memo, useContext, useState } from 'react';
+import React, { memo, useContext } from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -27,8 +27,8 @@ function ChipSt({ avatar, num, color }) {
   );
 }
 
-const ListItemSt = memo(function ListItemSt({ zTura, zTureDatumId, handleOpenDetalji }) {
-  const { vrsteTura, vrsteQuadova, quadovi, setSelectedZTura, handleDeleteZTura } = useContext(TureContext);
+const ListItemSt = memo(function ListItemSt({ zTura, handleOpenDetalji, handleOpenConfirm }) {
+  const { vrsteTura, vrsteQuadova, quadovi, setSelectedZTura } = useContext(TureContext);
   const { theme } = useContext(GlobalContext);
 
   const vrP = zTura.vrijemePocetka.toDate();
@@ -47,6 +47,11 @@ const ListItemSt = memo(function ListItemSt({ zTura, zTureDatumId, handleOpenDet
     handleOpenDetalji();
   };
 
+  const handleDeleteZTura = () => {
+    setSelectedZTura(zTura);
+    handleOpenConfirm();
+  };
+
   return (
     <ListItem
       disablePadding
@@ -57,7 +62,6 @@ const ListItemSt = memo(function ListItemSt({ zTura, zTureDatumId, handleOpenDet
         '&:hover': {
           '& .MuiIconButton-root': {
             opacity: 1,
-            right: '-16px',
           },
           '& .vrijemeTrajanja': {
             opacity: 0.2,
@@ -86,20 +90,19 @@ const ListItemSt = memo(function ListItemSt({ zTura, zTureDatumId, handleOpenDet
           </Typography>
           <IconButton
             aria-label="close"
-            onClick={() => handleDeleteZTura(zTura.id, zTureDatumId)}
+            onClick={handleDeleteZTura}
             sx={{
               transition: 'all 0.3s ease-out',
               background: theme.palette.primary.main,
               color: theme.palette.primary.contrastText,
               position: 'absolute',
-              right: '-60px',
+              right: '-16px',
               bottom: '-11px',
               paddingRight: '10px',
               borderRadius: '15px 0 0 15px',
               opacity: 0,
               [theme.breakpoints.down('sm')]: {
                 opacity: 1,
-                right: '-16px',
               },
               '&:hover': {
                 background: theme.palette.primary.light,
@@ -113,7 +116,7 @@ const ListItemSt = memo(function ListItemSt({ zTura, zTureDatumId, handleOpenDet
     >
       <ListItemButton style={{ padding: '0', paddingLeft: '10px' }} onClick={handleOpenItem}>
         <ListItemIcon sx={{}}>
-          <Typography variant="h5" gutterBottom component="div" margin='auto'>
+          <Typography variant="h5" gutterBottom component="div" margin="auto">
             {vTureNaziv}
           </Typography>
         </ListItemIcon>
@@ -140,11 +143,16 @@ const ListItemSt = memo(function ListItemSt({ zTura, zTureDatumId, handleOpenDet
   );
 });
 
-function ZavrseneTureLista({ zTure, zTureDatumId, handleOpenDetalji }) {
+function ZavrseneTureLista({ zTure, handleOpenDetalji, handleOpenConfirm }) {
   return (
     <List style={{ padding: '0' }} dense={true}>
       {zTure.map((zT) => (
-        <ListItemSt key={zT.id} zTura={zT} zTureDatumId={zTureDatumId} handleOpenDetalji={handleOpenDetalji} />
+        <ListItemSt
+          key={zT.id}
+          zTura={zT}
+          handleOpenDetalji={handleOpenDetalji}
+          handleOpenConfirm={handleOpenConfirm}
+        />
       ))}
     </List>
   );

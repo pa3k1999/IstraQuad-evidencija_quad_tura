@@ -1,4 +1,4 @@
-import { addDoc, collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, setDoc, updateDoc } from 'firebase/firestore';
 
 import db from '../firebase.config';
 
@@ -13,7 +13,8 @@ export const getDataF = async (dbPath, setData) => {
 
 export const handleNewDataF = async (data, vrsta, id, state, setState) => {
   try {
-    const docRef = (id === '' ? await addDoc(collection(db, vrsta), { ...data }) : await setDoc(doc(db, vrsta, id), { ...data }));
+    const docRef =
+      id === '' ? await addDoc(collection(db, vrsta), { ...data }) : await setDoc(doc(db, vrsta, id), { ...data });
     setState([...state, { id: id === '' ? docRef.id : id, ...data }]);
     console.log('Document written with ID: ', id === '' ? docRef.id : id);
   } catch (e) {

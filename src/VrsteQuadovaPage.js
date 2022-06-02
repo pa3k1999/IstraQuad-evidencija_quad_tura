@@ -8,12 +8,10 @@ function VrsteQuadovaPage() {
   const [isOpenForma, setIsOpenForma] = useState(false);
 
   return (
-    
     <TabWrap title={<Typography variant="h6">Vrste Quadova</Typography>}>
-        <VrsteQuadovaLista handleSetIsOpenForma={setIsOpenForma}/>
-        <NovaVQuadaPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
+      <VrsteQuadovaLista handleSetIsOpenForma={setIsOpenForma} />
+      <NovaVQuadaPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
     </TabWrap>
-    
   );
 }
 

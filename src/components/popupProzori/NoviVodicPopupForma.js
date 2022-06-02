@@ -1,26 +1,10 @@
-import React, { forwardRef, memo, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import {
-  Box,
-  CircularProgress,
-  Fab,
-  IconButton,
-  InputAdornment,
-  Popover,
-  Slide,
-  Stack,
-  useMediaQuery,
-} from '@mui/material';
+import { Box, Checkbox, CircularProgress, Fab, FormControlLabel, IconButton, InputAdornment, Stack } from '@mui/material';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import useInputState from '../../hooks/useInputState';
 import AddIcon from '@mui/icons-material/Add';
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { HexColorPicker } from 'react-colorful';
-import { ColorLens } from '@mui/icons-material';
-import styled from '@emotion/styled';
-import { VrsteQuadovaContext } from '../../contexts/VrsteQuadovaContext';
 import PopupWrap from '../PopupWrap';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -38,16 +22,21 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
   const [iLozinkaC, changeILozinkaC, resetILozinkaC, setILozinkaC] = useInputState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLozinkaPrikaz, setIsLozinkaPrikaz] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleClose = () => {
     handleSetIsOpenForma(false);
   };
 
+  const handleChangeIsAdmin = (e) => {
+    setIsAdmin(e.target.checked);
+  };
+
   const handleDodaj = async () => {
     const newVodici = { eMail: iEmail, ime: iIme, prezime: iPrezime, korisnickoIme: iKorisnickoIme };
-    const userData = {eMail: iEmail, lozinka: iLozinkaC}
+    const userData = { eMail: iEmail, lozinka: iLozinkaC };
     setIsLoading(true);
-    handleNewDataVodic(newVodici, userData).then(() => {
+    handleNewDataVodic(newVodici, userData, isAdmin).then(() => {
       handleClose();
       setIsLoading(false);
     });
@@ -71,17 +60,13 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
       return true;
     });
     ValidatorForm.addValidationRule('isKImeUsed', (value) => {
-      return vodici.every(
-        (v) => v.korisnickoIme.toLowerCase() !== value.toLowerCase()
-      );
+      return vodici.every((v) => v.korisnickoIme.toLowerCase() !== value.toLowerCase());
     });
     ValidatorForm.addValidationRule('isEmailUsed', (value) => {
-      return vodici.every(
-        (v) => v.eMail.toLowerCase() !== value.toLowerCase()
-      );
+      return vodici.every((v) => v.eMail.toLowerCase() !== value.toLowerCase());
     });
     ValidatorForm.addValidationRule('isLozinkaIsta', (value) => {
-      return value === iLozinka
+      return value === iLozinka;
     });
   }, [iIme, iPrezime, iKorisnickoIme, iEmail, iLozinka, iLozinkaC]);
 
@@ -100,7 +85,7 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
 
   return (
     <>
-      <PopupWrap open={open} title='Dodaj vodica' handleClose={handleClose}>
+      <PopupWrap open={open} title="Dodaj vodica" handleClose={handleClose}>
         <ValidatorForm id="vodic" onSubmit={handleDodaj}>
           <Stack alignItems="center" spacing={1}>
             <TextValidator
@@ -175,6 +160,9 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
                 helperText=" "
               />
               {prikaziButton}
+            </Box>
+            <Box width='300px'>
+              <FormControlLabel control={<Checkbox checked={isAdmin} onChange={handleChangeIsAdmin} />} label="Admin" />
             </Box>
           </Stack>
         </ValidatorForm>

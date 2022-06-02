@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { GlobalContext } from './contexts/GlobalContext';
 
 function ErrorPage() {
-  const { theme, getUserEmail } = useContext(GlobalContext);
+  const { theme } = useContext(GlobalContext);
 
   const navigate = useNavigate();
 
@@ -16,7 +16,7 @@ function ErrorPage() {
       >
         <Typography variant="h6">Error</Typography>
       </Box>
-      <Stack alignItems="center" spacing={1} style={{marginTop: '20px'}}>
+      <Stack alignItems="center" spacing={1} style={{ marginTop: '20px' }}>
         <Typography variant="body1">Domeni se nemoze pristupiti!</Typography>
       </Stack>
       <Box style={{ textAlign: 'right', height: '40px', margin: '20px 10px 10px 10px' }}>

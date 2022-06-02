@@ -36,7 +36,7 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   useEffect(() => {
     setiNaziv(selectedQuad.naziv);
     setIBrSasije(selectedQuad.brSasije);
-    setVrstaQuada(selectedQuad.vrstaQuadaId)
+    setVrstaQuada(selectedQuad.vrstaQuadaId);
   }, [selectedQuad]);
 
   const handleOpenNew = () => {
@@ -57,12 +57,10 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
   const handleDodaj = async () => {
     const newQuad = { naziv: iNaziv, brSasije: iBrSasije, vrstaQuadaId: vrstaQuada };
     setIsLoading(true);
-    (isUpd ? handleUpdateDataQuad(newQuad, selectedQuad.id) : handleNewDataQuad(newQuad)).then(
-      () => {
-        handleClose();
-        setIsLoading(false);
-      }
-    );
+    (isUpd ? handleUpdateDataQuad(newQuad, selectedQuad.id) : handleNewDataQuad(newQuad)).then(() => {
+      handleClose();
+      setIsLoading(false);
+    });
   };
 
   const handleChangeSelect = (event) => {
@@ -77,11 +75,11 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
       return true;
     });
     ValidatorForm.addValidationRule('isNazivUsed', (value) => {
-      return quadovi.every(q => q.id.toLowerCase() !== value.toLowerCase() || selectedQuad.id.toLowerCase() === value.toLowerCase());
+      return quadovi.every(
+        (q) => q.id.toLowerCase() !== value.toLowerCase() || selectedQuad.id.toLowerCase() === value.toLowerCase()
+      );
     });
   }, [iNaziv, iBrSasije, vrstaQuada]);
-
-//TODO: makni iNaziv
 
   return (
     <>
@@ -95,14 +93,20 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
               label="Vrsta quada"
               onChange={handleChangeSelect}
               sx={{ m: 1, minWidth: '300px' }}
-              helperText=' '
+              helperText=" "
               validators={['isEmpty']}
               errorMessages={['Nesmije bit prazno']}
             >
-              {vrsteQuadova.map(vq => (
-                <StyledMenuItem key={vq.id} value={vq.id}><Stack direction="row" spacing={1}><Avatar sx={{ width: 18, height: 18, bgcolor: `${vq.boja}`, margin:'2px', marginRight: "5px" }}> </Avatar>{vq.naziv}</Stack></StyledMenuItem>
+              {vrsteQuadova.map((vq) => (
+                <StyledMenuItem key={vq.id} value={vq.id}>
+                  <Stack direction="row" spacing={1}>
+                    <Avatar sx={{ width: 18, height: 18, bgcolor: `${vq.boja}`, margin: '2px', marginRight: '5px' }}>
+                      {' '}
+                    </Avatar>
+                    {vq.naziv}
+                  </Stack>
+                </StyledMenuItem>
               ))}
-              
             </SelectValidator>
             <TextValidator
               label="Naziv"

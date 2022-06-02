@@ -1,35 +1,8 @@
-import { Button, ButtonGroup, FormControlLabel, Paper, Stack, Switch, Typography } from '@mui/material';
+import { Button, ButtonGroup, Paper, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import db from './firebase.config';
-import {
-  ResponsiveContainer,
-  AreaChart,
-  Area,
-  LineChart,
-  Line,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Brush,
-  BarChart,
-  Legend,
-  Bar,
-} from 'recharts';
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  setDoc,
-  startAfter,
-  Timestamp,
-  where,
-} from 'firebase/firestore';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, Brush, BarChart, Legend, Bar } from 'recharts';
+import { collection, getDocs, orderBy, query } from 'firebase/firestore';
 import { GlobalContext } from './contexts/GlobalContext';
 import TabWrap from './components/TabWrap';
 import { Box } from '@mui/system';
@@ -216,26 +189,29 @@ function StatistikaPage() {
         </ResponsiveContainer>
         <ResponsiveContainer width="100%" height={30}>
           <AreaChart data={statistikaData.data} syncId="sync" margin={{ top: 0, right: 80, left: 80, bottom: 0 }}>
-            <Brush dataKey="datum" height={30} stroke={theme.palette.primary.main} onChange={e => console.log(e)}/>
+            <Brush dataKey="datum" height={30} stroke={theme.palette.primary.main} onChange={(e) => console.log(e)} />
             <Area />
           </AreaChart>
         </ResponsiveContainer>
       </Box>
       <Box paddingBottom={1}>
         <ResponsiveContainer width="100%" height={100}>
-          <BarChart layout="vertical" stackOffset="expand" barCategoryGap={0} data={statistikaData.dataSve && (isSati ? statistikaData.dataSve.sati : statistikaData.dataSve.ture)} margin={0}>
+          <BarChart
+            layout="vertical"
+            stackOffset="expand"
+            barCategoryGap={0}
+            data={statistikaData.dataSve && (isSati ? statistikaData.dataSve.sati : statistikaData.dataSve.ture)}
+            margin={0}
+          >
             <Tooltip />
             <XAxis hide={true} type="number" />
             <YAxis hide={true} dataKey="datum" type="category" />
             <Legend />
             {statistikaData.vrsteTura &&
-              statistikaData.vrsteTura.map((vT, i) => (
-                <Bar dataKey={vT} stackId="a"  fill={boje[i]} />
-              ))}
+              statistikaData.vrsteTura.map((vT, i) => <Bar dataKey={vT} stackId="a" fill={boje[i]} />)}
           </BarChart>
         </ResponsiveContainer>
       </Box>
-      
     </TabWrap>
   );
 }

@@ -49,10 +49,7 @@ function QuadoviUTuriLista() {
         <List style={{ padding: '0' }} dense={true}>
           {selectedZTura.quadovi.map((qZT) => (
             <>
-              <ListItemSt
-                quad={quadovi.find((q) => q.id === qZT)}
-                napomena={napomene.find((n) => n.quadId === qZT)}
-              />
+              <ListItemSt quad={quadovi.find((q) => q.id === qZT)} napomena={napomene.find((n) => n.quadId === qZT)} />
               <Divider style={{ borderBottom: '2px solid rgba(0, 0, 0, 0.2)' }} />
             </>
           ))}

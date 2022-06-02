@@ -1,20 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  setDoc,
-  startAfter,
-  Timestamp,
-  where,
-} from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
 import db from '../firebase.config';
-import { getDataF, handleDeleteeDataF, handleNewDataF, handleUpdateDataF } from './firestoreFunkcije';
+import { getDataF } from './firestoreFunkcije';
 
 export const TureContext = createContext();
 
@@ -26,16 +13,16 @@ const deleteZTura = async (id, datumId, zTure, setZTure) => {
     queryRef.forEach((d) => {
       deleteDoc(doc(db, 'napomene', d.id));
     });
-    const filterdTure = zTure[datumId].filter(zT => zT.id !== id);
-    console.log(filterdTure.length)
-    if(filterdTure.length === 0){
-      let tempZTure = {...zTure};
+    const filterdTure = zTure[datumId].filter((zT) => zT.id !== id);
+    console.log(filterdTure.length);
+    if (filterdTure.length === 0) {
+      let tempZTure = { ...zTure };
       delete tempZTure[datumId];
-      setZTure({...tempZTure});
+      setZTure({ ...tempZTure });
     } else {
-      setZTure({...zTure, [datumId]: filterdTure});
+      setZTure({ ...zTure, [datumId]: filterdTure });
     }
-    
+
     console.log('Tura obrisana.');
   } catch (e) {
     console.error('Error deliting document: ', e);
@@ -155,13 +142,16 @@ export function TureProvider({ children }) {
     });
   };
 
-  const handleNewZTura = async(NovaZTura, napomene) => {
+  const handleNewZTura = async (NovaZTura, napomene) => {
     await handleNewZTuraF(NovaZTura, napomene, zTure, setZTure, rasponDatuma);
   };
 
-  const handleDeleteZTura = async(id, datumId) => {
+  const handleDeleteZTura = async () => {
+    const id = selectedZTura.id;
+    const dat = selectedZTura.vrijemePocetka.toDate();
+    const datumId = `${dat.getDate()}.${dat.getMonth() + 1}.${dat.getFullYear()}`;
     await deleteZTura(id, datumId, zTure, setZTure);
-  }
+  };
 
   return (
     <TureContext.Provider

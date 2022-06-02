@@ -5,14 +5,15 @@ import React, { useEffect, useState } from 'react';
 import TabWrap from './components/TabWrap';
 import db from './firebase.config';
 import { useParams } from 'react-router-dom';
-import { getDataF, handleDeleteeDataF, handleNewDataF, handleUpdateDataF } from './contexts/firestoreFunkcije';
 import styled from '@emotion/styled';
 
-const StyledStack = styled((props) => <Stack direction="column" justifyContent="center" alignItems="center" spacing={0} {...props} />)(({ theme }) => ({
-  margin: '10px 0', 
+const StyledStack = styled((props) => (
+  <Stack direction="column" justifyContent="center" alignItems="center" spacing={0} {...props} />
+))(({ theme }) => ({
+  margin: '10px 0',
   '&:hover': {
-    backgroundColor: 'rgba(243, 243, 243, 0.8)'
-  }
+    backgroundColor: 'rgba(243, 243, 243, 0.8)',
+  },
 }));
 
 const getKorisnik = async (uid) => {
@@ -35,7 +36,7 @@ const getTure = async (uid) => {
   return array;
 };
 
-const getVrsteTura = async() => {
+const getVrsteTura = async () => {
   let data = [];
   const querySnapshot = await getDocs(collection(db, 'vrsteTura'));
   querySnapshot.forEach((doc) => {
@@ -48,27 +49,26 @@ function KorisnikPage() {
   const { uid } = useParams();
   const [korisnik, setKorisnik] = useState({});
   const [ture, setTure] = useState([]);
-  const [vrsteTura, setVrsteTura] = useState([]);
 
   const [ukupnoVrijeme, setUkupnoVrijeme] = useState(0);
   const [isLoadingKorisnik, setIsLoadingKorisnik] = useState(true);
-  const [isLoadingTure, setIsLoadingTure] = useState(true);
 
-  console.log(ukupnoVrijeme)
+  console.log(ukupnoVrijeme);
 
   useEffect(() => {
-    getKorisnik(uid).then(korisnik => {
-        setKorisnik(korisnik)
-        setIsLoadingKorisnik(false);
-      })
-      const setup = async() => {
-        const tureTemp = await getTure(uid);
-        setTure(tureTemp);
-        const vrsteTuraTemp = await getVrsteTura();
-        setVrsteTura(vrsteTuraTemp);
-        setUkupnoVrijeme(tureTemp.reduce((sum, t)=> sum + vrsteTuraTemp.find((vT) => vT.id === t.vrstaTureId).minute, 0))
-      }
-      setup();
+    getKorisnik(uid).then((korisnik) => {
+      setKorisnik(korisnik);
+      setIsLoadingKorisnik(false);
+    });
+    const setup = async () => {
+      const tureTemp = await getTure(uid);
+      setTure(tureTemp);
+      const vrsteTuraTemp = await getVrsteTura();
+      setUkupnoVrijeme(
+        tureTemp.reduce((sum, t) => sum + vrsteTuraTemp.find((vT) => vT.id === t.vrstaTureId).minute, 0)
+      );
+    };
+    setup();
 
     console.log('--Fetching data from firebase (korisnik)--');
   }, []);
@@ -95,24 +95,16 @@ function KorisnikPage() {
     >
       <Box>
         <StyledStack>
-          <Typography variant="subtitle1">
-            broj odradjenih tura
-          </Typography>
-          <Typography variant="h5">
-            {ture.length}
-          </Typography>
+          <Typography variant="subtitle1">broj odradjenih tura</Typography>
+          <Typography variant="h5">{ture.length}</Typography>
         </StyledStack>
         <StyledStack>
-          <Typography variant="subtitle1">
-            ukupno sati provedeno na turama
-          </Typography>
-          <Typography variant="h5">
-          {Math.trunc(ukupnoVrijeme / 60)}h
-          </Typography>
+          <Typography variant="subtitle1">ukupno sati provedeno na turama</Typography>
+          <Typography variant="h5">{Math.trunc(ukupnoVrijeme / 60)}h</Typography>
         </StyledStack>
       </Box>
     </TabWrap>
   );
 }
- 
+
 export default KorisnikPage;

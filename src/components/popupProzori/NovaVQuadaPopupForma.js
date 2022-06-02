@@ -1,8 +1,6 @@
-import React, { forwardRef, memo, useContext, useEffect, useState } from 'react';
+import React, { memo, useContext, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import { Box, CircularProgress, Fab, Popover, Slide, Stack, useMediaQuery } from '@mui/material';
+import { Box, CircularProgress, Fab, Popover, Stack } from '@mui/material';
 import { GlobalContext } from '../../contexts/GlobalContext';
 import useInputState from '../../hooks/useInputState';
 import AddIcon from '@mui/icons-material/Add';
@@ -35,15 +33,15 @@ const StyledPopover = styled((props) => (
 }));
 
 function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
-
   const { theme } = useContext(GlobalContext);
-  const { selectedVrstaQuada, vrsteQuadova, handleNewDataVQuada, handleUpdateDataVQuada } = useContext(VrsteQuadovaContext);
-  
+  const { selectedVrstaQuada, vrsteQuadova, handleNewDataVQuada, handleUpdateDataVQuada } =
+    useContext(VrsteQuadovaContext);
+
   const [iNaziv, handleChangeINaziv, resetINaziv, setINaziv] = useInputState('');
   const [iObujam, handleChangeIObujam, resetIObujam, setIObujam] = useInputState('');
   const [color, setColor] = useState('');
-  const [isLoading, setIsLoading] = useState(false); 
-  const [isUpd, setIsUpd] = useState(true); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [isUpd, setIsUpd] = useState(true);
 
   useEffect(() => {
     setINaziv(selectedVrstaQuada.naziv);
@@ -53,13 +51,18 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
 
   const handleClose = () => {
     handleSetIsOpenForma(false);
-    setTimeout(() => {setIsUpd(true)}, 500);
-  }
+    setTimeout(() => {
+      setIsUpd(true);
+    }, 500);
+  };
 
   const handleDodaj = async () => {
-    const newVrstaQuada = { naziv: iNaziv, obujamMotora: iObujam, boja: color};
+    const newVrstaQuada = { naziv: iNaziv, obujamMotora: iObujam, boja: color };
     setIsLoading(true);
-    (isUpd ? handleUpdateDataVQuada(newVrstaQuada, selectedVrstaQuada.id) : handleNewDataVQuada(newVrstaQuada, '')).then(() => {
+    (isUpd
+      ? handleUpdateDataVQuada(newVrstaQuada, selectedVrstaQuada.id)
+      : handleNewDataVQuada(newVrstaQuada, '')
+    ).then(() => {
       handleClose();
       setIsLoading(false);
     });
@@ -81,7 +84,11 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
       return true;
     });
     ValidatorForm.addValidationRule('isNazivUsed', (value) => {
-      return vrsteQuadova.every((VQ) => VQ.naziv.toLowerCase() !== value.toLowerCase() || selectedVrstaQuada.naziv.toLowerCase() === value.toLowerCase());
+      return vrsteQuadova.every(
+        (VQ) =>
+          VQ.naziv.toLowerCase() !== value.toLowerCase() ||
+          selectedVrstaQuada.naziv.toLowerCase() === value.toLowerCase()
+      );
     });
   }, [iNaziv, iObujam]);
 
@@ -102,7 +109,7 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
             <TextValidator
               label="Naziv"
               color="secondary"
-              style={{ width: '300px', }}
+              style={{ width: '300px' }}
               value={iNaziv}
               onChange={handleChangeINaziv}
               validators={['isEmpty', 'isNazivUsed']}

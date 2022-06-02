@@ -10,22 +10,21 @@ import { QuadoviContext } from '../contexts/QuadoviContext';
 import { useNavigate } from 'react-router-dom';
 
 const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handleOpenDelete }) {
-
   const { setSelectedQuad } = useContext(QuadoviContext);
   const navigate = useNavigate();
-  
+
   const handleEdit = () => {
     setSelectedQuad(quad);
     handleSetIsOpenForma(true);
-  }
-  
+  };
+
   const handleDelete = () => {
     setSelectedQuad(quad);
     handleOpenDelete(true);
-  }
+  };
 
-    return (
-      <>
+  return (
+    <>
       <ListItem
         disablePadding
         secondaryAction={
@@ -47,22 +46,27 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handle
             <Typography variant="subtitle1" gutterBottom component="div" margin={0}>
               {quad.naziv}
             </Typography>
-            <Typography variant="caption" gutterBottom component="div" margin={0} >
+            <Typography variant="caption" gutterBottom component="div" margin={0}>
               {quad.brSasije}
             </Typography>
           </Stack>
         </ListItemButton>
       </ListItem>
       <Divider />
-      </>
-    );
-  });
+    </>
+  );
+});
 
-function QuadoviLista({quadovi, handleSetIsOpenForma, setIsConfirmDOpen}) {
+function QuadoviLista({ quadovi, handleSetIsOpenForma, setIsConfirmDOpen }) {
   return (
     <List style={{ padding: '0' }} dense={true}>
-      {quadovi.map(q => (
-          <ListItemSt quad={q} handleSetIsOpenForma={handleSetIsOpenForma} handleOpenDelete={setIsConfirmDOpen} key={q.id}/>
+      {quadovi.map((q) => (
+        <ListItemSt
+          quad={q}
+          handleSetIsOpenForma={handleSetIsOpenForma}
+          handleOpenDelete={setIsConfirmDOpen}
+          key={q.id}
+        />
       ))}
     </List>
   );

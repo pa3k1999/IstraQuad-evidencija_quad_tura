@@ -15,7 +15,7 @@ const Accordion = styled((props) => <MuiAccordion disableGutters elevation={0} s
     display: 'none',
   },
   '& .MuiButtonBase-root': {
-    minHeight: '30px'
+    minHeight: '30px',
   },
 }));
 
@@ -38,22 +38,21 @@ const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
   borderTop: '1px solid rgba(0, 0, 0, .125)',
 }));
 
-function DropDownWrap({children, titleChildren}) {
-
+function DropDownWrap({ children, titleChildren }) {
   const [isExpanded, toggleIsExpanded] = useToggle();
 
   const handleToggle = () => {
     toggleIsExpanded();
-  }
+  };
 
   return (
     <Accordion expanded={isExpanded} onChange={handleToggle}>
-      <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" >
+      <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
         {titleChildren}
       </AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
-  )
+  );
 }
 
-export default  DropDownWrap;
+export default DropDownWrap;

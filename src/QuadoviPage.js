@@ -8,7 +8,6 @@ import TabWrap from './components/TabWrap';
 import { QuadoviContext } from './contexts/QuadoviContext';
 
 function QuadoviPage() {
-
   const { selectedQuad, vrsteQuadova, quadovi, handleDeleteeDataQuad } = useContext(QuadoviContext);
 
   const [isOpenForma, setIsOpenForma] = useState(false);
@@ -24,8 +23,10 @@ function QuadoviPage() {
               key={vq.id}
               titleChildren={
                 <>
-                  <Avatar sx={{ width: 20, height: 20, bgcolor: `${vq.boja}`, margin:'2px', marginRight: "5px" }}> </Avatar>
-                  <Typography style={{ margin: '0', padding: '0'}}>{vq.naziv}</Typography>
+                  <Avatar sx={{ width: 20, height: 20, bgcolor: `${vq.boja}`, margin: '2px', marginRight: '5px' }}>
+                    {' '}
+                  </Avatar>
+                  <Typography style={{ margin: '0', padding: '0' }}>{vq.naziv}</Typography>
                 </>
               }
             >
@@ -39,10 +40,10 @@ function QuadoviPage() {
         }
       })}
       <ConfirmBrisanje
+        text="Brisanjem ove stavke obrisati ce se sve duge stavke koje su vezane sa ovom stavkom (zavrsene ture). Jeste li sigurni da zelite obristai ovu stavku?"
         isOpen={isConfirmDOpen}
         handleClose={() => setIsConfirmDOpen(false)}
-        dataId={selectedQuad.id}
-        handleDeleteeData={handleDeleteeDataQuad}
+        handleDeleteeData={() => handleDeleteeDataQuad(selectedQuad.id)}
       />
       <NoviQuadPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
     </TabWrap>
