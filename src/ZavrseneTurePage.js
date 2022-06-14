@@ -9,7 +9,7 @@ import ZavrseneTureLista from './components/ZavrseneTureLista';
 import { TureContext } from './contexts/TureContext';
 import hrLocale from 'date-fns/locale/hr';
 import { GlobalContext } from './contexts/GlobalContext';
-import SearchIcon from '@mui/icons-material/Search';
+import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import styled from '@emotion/styled';
 import MuiAccordion from '@mui/material/Accordion';
@@ -130,9 +130,9 @@ function ZavrseneTurePage() {
       const length = Object.keys(zTure).length;
       console.log(Object.values(zTure)[length - 1]);
       const stopDateRaw = Object.values(zTure)[length - 1][0].vrijemePocetka.toDate();
-      const stopDate = new Date(stopDateRaw.getFullYear(), stopDateRaw.getMonth(), stopDateRaw.getDate(), 0, 0, 0);
+      const stopDate = new Date(stopDateRaw.getFullYear(), stopDateRaw.getMonth(), stopDateRaw.getDate()+1, 0, 0, 0);
       const startDateRaw = Object.values(zTure)[0][0].vrijemePocetka.toDate();
-      var startDate = new Date(startDateRaw.getFullYear(), startDateRaw.getMonth(), startDateRaw.getDate(), 0, 0, 0);
+      var startDate = new Date(startDateRaw.getFullYear(), startDateRaw.getMonth(), startDateRaw.getDate()-1, 0, 0, 0);
       while (startDate <= stopDate) {
         const stringDate = `${startDate.getDate()}.${startDate.getMonth() + 1}.${startDate.getFullYear()}`;
         dateArray.push({ datum: stringDate, ture: zTure[stringDate] ? zTure[stringDate].length : 0 });
@@ -195,7 +195,7 @@ function ZavrseneTurePage() {
         <Box style={{ backgroundColor: theme.palette.primary.main, minHeight: '32px', padding: '10px 20px' }}>
           <Accordion style={{ backgroundColor: theme.palette.primary.main, border: 'none' }}>
             <AccordionSummary
-              expandIcon={<SearchIcon />}
+              expandIcon={<FilterAltRoundedIcon />}
               style={{ backgroundColor: theme.palette.primary.main, minHeight: '32px', color: 'white' }}
             >
               <Typography variant="h6">Zavrsene Ture</Typography>
@@ -210,7 +210,7 @@ function ZavrseneTurePage() {
                 <StyledTab label="Od-Do" {...a11yProps(1)} />
               </StyledTabs>
               <TabPanel value={value} index={0}>
-                <Stack>
+                <Stack spacing={1}>
                   <Box marginTop={1}>
                     <LocalizationProvider dateAdapter={AdapterDateFns} locale={hrLocale}>
                       <MobileDatePicker
@@ -228,10 +228,9 @@ function ZavrseneTurePage() {
                     </LocalizationProvider>
                   </Box>
                   <Box width="100%" textAlign="right">
-                    {' '}
                     <Button variant="contained" onClick={handleFiltriraj}>
                       Filtriraj
-                    </Button>{' '}
+                    </Button>
                   </Box>
                 </Stack>
               </TabPanel>

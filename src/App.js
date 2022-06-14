@@ -23,8 +23,7 @@ import HomePage from './HomePage';
 
 //TODO: napraviti pregled profila i uredjivanje podataka
 //      loading za dodavanje zTura
-//      loading podataka za sve (restrukturirat kako se podatci dobivaju iz firebasea)
-//      prikaz brisanja i edita samo za admina na nekim stranicama
+//      home page
 
 const StyledPaper = styled((props) => <Paper {...props} />)(({ theme }) => ({
   overflowY: 'scroll',

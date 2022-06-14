@@ -44,9 +44,9 @@ const getZTure = async () => {
   var dataArray = new Array();
   const length = Object.keys(obj).length;
   const stopDateRaw = Object.values(obj)[length - 1][0].vrijemePocetka.toDate();
-  const stopDate = new Date(stopDateRaw.getFullYear(), stopDateRaw.getMonth(), stopDateRaw.getDate(), 0, 0, 0);
+  const stopDate = new Date(stopDateRaw.getFullYear(), stopDateRaw.getMonth(), stopDateRaw.getDate()+1, 0, 0, 0);
   const startDateRaw = Object.values(obj)[0][0].vrijemePocetka.toDate();
-  var startDate = new Date(startDateRaw.getFullYear(), startDateRaw.getMonth(), startDateRaw.getDate(), 0, 0, 0);
+  var startDate = new Date(startDateRaw.getFullYear(), startDateRaw.getMonth(), startDateRaw.getDate()-1, 0, 0, 0);
   while (startDate <= stopDate) {
     const stringDate = `${startDate.getDate()}.${startDate.getMonth() + 1}.${startDate.getFullYear()}`;
     const ture = obj[stringDate] ? obj[stringDate].length : 0;

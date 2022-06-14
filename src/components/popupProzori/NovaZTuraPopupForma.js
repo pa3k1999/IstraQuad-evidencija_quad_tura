@@ -188,6 +188,12 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
     setStep(1);
   };
 
+//TODO: napravit da se nemoze mjenjat vrijeme zavrsetka nego se postavlja automatski i da se ne mjenja datum kad se promjeni vrijeme pocetka
+
+  const handleSetPocetnoVrijeme = () => {
+
+  }
+
   const handleStep2 = () => {
     const selectedQuadovi = Object.keys(checked)
       .filter((k) => checked[k] === true)

@@ -8,9 +8,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ConfirmBrisanje from './popupProzori/ConfirmBrisanje';
 import { VrsteQuadovaContext } from '../contexts/VrsteQuadovaContext';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, vrstaQuada, handleOpenDelete }) {
   const { setSelectedVrstaQuada } = useContext(VrsteQuadovaContext);
+  const { userClaims } = useContext(GlobalContext);
 
   const handleEdit = () => {
     setSelectedVrstaQuada(vrstaQuada);
@@ -27,14 +29,18 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, vrstaQuada, 
       <ListItem
         disablePadding
         secondaryAction={
-          <>
-            <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleEdit}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleDelete}>
-              <DeleteIcon />
-            </IconButton>
-          </>
+          userClaims.admin ? (
+            <>
+              <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleEdit}>
+                <EditIcon />
+              </IconButton>
+              <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          ) : (
+            <></>
+          )
         }
         style={{
           height: '54px',

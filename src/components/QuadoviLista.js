@@ -8,9 +8,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { QuadoviContext } from '../contexts/QuadoviContext';
 import { useNavigate } from 'react-router-dom';
+import { GlobalContext } from '../contexts/GlobalContext';
 
 const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handleOpenDelete }) {
   const { setSelectedQuad } = useContext(QuadoviContext);
+  const { userClaims } = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const handleEdit = () => {
@@ -28,14 +30,18 @@ const ListItemSt = memo(function ListItemSt({ handleSetIsOpenForma, quad, handle
       <ListItem
         disablePadding
         secondaryAction={
-          <>
-            <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleEdit}>
-              <EditIcon />
-            </IconButton>
-            <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleDelete}>
-              <DeleteIcon />
-            </IconButton>
-          </>
+          userClaims.admin ? (
+            <>
+              <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleEdit}>
+                <EditIcon />
+              </IconButton>
+              <IconButton edge="end" aria-label="delete" style={{ margin: '1px' }} onClick={handleDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </>
+          ) : (
+            <></>
+          )
         }
         style={{
           height: '54px',
