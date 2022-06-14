@@ -6,7 +6,7 @@ import db from '../firebase.config';
 
 export const VodiciContext = createContext();
 
-const handleDeleteVQuada = async (uid) => {
+const handleDeleteSveTure = async (uid) => {
   try {
     const queryTure = query(collection(db, 'ture'), where('vodicId', '==', uid));
     getDocs(queryTure).then((queryRefTure) => {
@@ -58,7 +58,7 @@ export function VodiciProvider({ children }) {
       .then(async (res) => {
         if (res.data) {
           await handleDeleteeDataF('vodici', id, vodici, setVodici);
-          await handleDeleteVQuada(id);
+          await handleDeleteSveTure(id);
         }
       });
   };
