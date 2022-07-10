@@ -78,7 +78,7 @@ function VrsteQuadovaLista({ handleSetIsOpenForma }) {
         ))}
       </List>
       <ConfirmBrisanje
-        text="Brisanjem ove stavke obrisati ce se sve stavke koje su vezane sa ovom stavkom (zavrsene ture i quadovi). Jeste li sigurni da zelite obristai ovu stavku?"
+        text="Brisanjem ove stavke obrisati će se sve stavke koje su vezane sa ovom stavkom (završene ture i quadovi). Jeste li sigurni da želite obristai ovu stavku?"
         isOpen={isConfirmDOpen}
         handleClose={() => setIsConfirmDOpen(false)}
         handleDeleteeData={() => handleDeleteeDataVQuada(selectedVrstaQuada.id)}

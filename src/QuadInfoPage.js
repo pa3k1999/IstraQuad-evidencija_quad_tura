@@ -125,11 +125,11 @@ function QuadInfoPage() {
       <Box>
         <Stack direction="row" justifyContent="space-evenly" sx={{ width: '100%' }}>
           <StyledStack>
-            <Typography variant="subtitle1">broj tura</Typography>
+            <Typography variant="subtitle1">Broj odrađenih tura</Typography>
             <Typography variant="h5">{tureQuada.length}</Typography>
           </StyledStack>
           <StyledStack>
-            <Typography variant="subtitle1">sati na turama</Typography>
+            <Typography variant="subtitle1">Sati provedeno na turama</Typography>
             <Typography variant="h5">{Math.trunc(ukupnoVrijeme / 60)}h</Typography>
           </StyledStack>
         </Stack>

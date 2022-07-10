@@ -95,11 +95,11 @@ function KorisnikPage() {
     >
       <Box>
         <StyledStack>
-          <Typography variant="subtitle1">broj odradjenih tura</Typography>
+          <Typography variant="subtitle1">Broj odrađenih tura</Typography>
           <Typography variant="h5">{ture.length}</Typography>
         </StyledStack>
         <StyledStack>
-          <Typography variant="subtitle1">ukupno sati provedeno na turama</Typography>
+          <Typography variant="subtitle1">Ukupno sati provedeno na turama</Typography>
           <Typography variant="h5">{Math.trunc(ukupnoVrijeme / 60)}h</Typography>
         </StyledStack>
       </Box>

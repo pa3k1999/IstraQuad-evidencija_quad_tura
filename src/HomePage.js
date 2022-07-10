@@ -66,20 +66,23 @@ function HomePage() {
           <b>Istra quad</b>
         </Typography>
       </Box>
-      <Grid container columns={{ xs: 4, md: 8 }} justifyContent="space-evenly" alignItems="center" >
-        <Grid item xs={4}>
-          <Stack direction="column" justifyContent="center" alignItems="center" spacing={0}>
-            <Typography variant="h6" color={theme.palette.primary.main}>broj odradjenih tura</Typography>
-            <Typography variant="h4" color={theme.palette.primary.main}>{ture.length}</Typography>
-          </Stack>
+      <Box style={{ maxWidth: '1000px', margin: 'auto'}}>
+        <Grid container columns={{ xs: 4, md: 8 }} justifyContent="space-evenly" alignItems="center" >
+          <Grid item xs={4}>
+            <Stack direction="column" justifyContent="center" alignItems="center" spacing={0}>
+              <Typography variant="h6" color={theme.palette.primary.main}>Broj odrađenih tura</Typography>
+              <Typography variant="h4" color={theme.palette.primary.main}>{ture.length}</Typography>
+            </Stack>
+          </Grid>
+          <Grid item xs={4}>
+            <Stack direction="column" justifyContent="center" alignItems="center" spacing={0}>
+              <Typography variant="h6" color={theme.palette.primary.main}>Ukupno sati provedeno na turama</Typography>
+              <Typography variant="h4" color={theme.palette.primary.main}>{Math.trunc(ukupnoVrijeme / 60)}h</Typography>
+            </Stack>
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <Stack direction="column" justifyContent="center" alignItems="center" spacing={0}>
-            <Typography variant="h6" color={theme.palette.primary.main}>ukupno sati provedeno na turama</Typography>
-            <Typography variant="h4" color={theme.palette.primary.main}>{Math.trunc(ukupnoVrijeme / 60)}h</Typography>
-          </Stack>
-        </Grid>
-      </Grid>
+      </Box>
+      
     </Box>
   );
 }

@@ -202,7 +202,7 @@ function NavBar() {
                           <ListItemIcon>
                             <GroupIcon sx={{ color: 'primary.contrastText' }} />
                           </ListItemIcon>
-                          <ListItemText primary="Vodici" />
+                          <ListItemText primary="Vodiči" />
                         </ListItemButton>
                       </ListItem>
                     ) : (
@@ -213,7 +213,7 @@ function NavBar() {
                         <ListItemIcon>
                           <SportsScoreIcon sx={{ color: 'primary.contrastText' }} />
                         </ListItemIcon>
-                        <ListItemText primary="Zavrsene ture" />
+                        <ListItemText primary="Završene ture" />
                       </ListItemButton>
                     </ListItem>
                     <Divider variant="middle" />

@@ -120,7 +120,7 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
             />
             <TextValidator
               fullWidth={true}
-              label="Broj sasije"
+              label="Broj šasije"
               color="secondary"
               style={{ width: '300px' }}
               value={iBrSasije}
@@ -141,7 +141,7 @@ function NoviQuadPopupForma({ open, handleSetIsOpenForma }) {
                 Odustani
               </Button>
               <Button type="submit" form="quad" variant="contained">
-                {isUpd ? 'Azuriraj' : 'Dodaj'}
+                {isUpd ? 'Ažuriraj' : 'Dodaj'}
               </Button>
             </>
           )}

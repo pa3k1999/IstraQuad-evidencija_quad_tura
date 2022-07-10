@@ -39,7 +39,7 @@ function ConfirmBrisanje({ isOpen, handleClose, handleDeleteeData, text='Jeste l
           <>
             <Button onClick={handleClose} style={{ marginRight: '10px' }}>Odustani</Button>
             <Button onClick={handleDelete} variant="contained" autoFocus>
-              Obrisi
+              Obriši
             </Button>
           </>
         )}

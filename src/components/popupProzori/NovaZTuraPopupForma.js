@@ -297,7 +297,7 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
               color="secondary"
               id="vodic-select"
               value={selectedVodic}
-              label="Vodic"
+              label="Vodič"
               onChange={changeSelectedVodic}
               sx={{ m: 1, minWidth: '300px' }}
               helperText=" "
@@ -322,7 +322,7 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
                 <Stack direction="row" spacing={2}>
                   <TimePicker
                     color="secondary"
-                    label="Pocetak"
+                    label="Početak"
                     value={vrijemePocetka}
                     onChange={setVrijemePocetka}
                     renderInput={(params) => <TextField color="secondary" {...params} />}
@@ -345,7 +345,7 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
           Odustani
         </Button>
         <Button type="submit" form="zTuraS1" variant="contained">
-          Sljedece
+          Sljedeće
         </Button>
       </Box>
     </>,
@@ -356,7 +356,7 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
             <Stack direction="row" spacing={2} marginTop="20px">
               <TextValidator
                 disabled
-                label="Broj vozaca"
+                label="Broj vozača"
                 color="secondary"
                 style={{ width: '120px' }}
                 value={brVozaca}
@@ -369,7 +369,7 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
                 }}
               />
               <TextValidator
-                label="Broj Suvozaca"
+                label="Broj Suvozača"
                 color="secondary"
                 style={{ width: '120px' }}
                 value={brSuvozaca}
@@ -426,7 +426,7 @@ function NovaZTuraPopupForma({ setIsOpenForma, isOpen = false }) {
           Natrag
         </Button>
         <Button variant="contained" type="submit" form="zTuraS2">
-          Sljedece
+          Sljedeće
         </Button>
       </Box>
     </>,

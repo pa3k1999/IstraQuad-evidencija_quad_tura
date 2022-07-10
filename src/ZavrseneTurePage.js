@@ -198,7 +198,7 @@ function ZavrseneTurePage() {
               expandIcon={<FilterAltRoundedIcon />}
               style={{ backgroundColor: theme.palette.primary.main, minHeight: '32px', color: 'white' }}
             >
-              <Typography variant="h6">Zavrsene Ture</Typography>
+              <Typography variant="h6">Završene Ture</Typography>
             </AccordionSummary>
 
             <AccordionDetails
@@ -206,7 +206,7 @@ function ZavrseneTurePage() {
             >
               <Divider />
               <StyledTabs value={value} onChange={handleChange} variant="fullWidth">
-                <StyledTab label="Mjesecno" {...a11yProps(0)} />
+                <StyledTab label="Mjesečno" {...a11yProps(0)} />
                 <StyledTab label="Od-Do" {...a11yProps(1)} />
               </StyledTabs>
               <TabPanel value={value} index={0}>
@@ -272,18 +272,20 @@ function ZavrseneTurePage() {
             </AccordionDetails>
           </Accordion>
         </Box>
-        {Object.keys(zTure).map((zT) => {
-          return (
-            <DropDownWrap key={zT} titleChildren={<Typography style={{ margin: '0', padding: '0' }}>{zT}</Typography>}>
-              <ZavrseneTureLista
-                zTure={zTure[zT]}
-                zTureDatumId={zT}
-                handleOpenDetalji={handleOpenDetalji}
-                handleOpenConfirm={handleOpenConfirm}
-              />
-            </DropDownWrap>
-          );
-        })}
+        {Object.keys(zTure).length === 0 ?
+          <Typography variant="subtitle1" sx={{color: "#6b6a6a", padding: '20px', textAlign: 'center'}}>Nema ni jedne stavke!</Typography> :
+          (Object.keys(zTure).map((zT) => {
+            return (
+              <DropDownWrap key={zT} titleChildren={<Typography style={{ margin: '0', padding: '0' }}>{zT}</Typography>}>
+                <ZavrseneTureLista
+                  zTure={zTure[zT]}
+                  zTureDatumId={zT}
+                  handleOpenDetalji={handleOpenDetalji}
+                  handleOpenConfirm={handleOpenConfirm}
+                />
+              </DropDownWrap>
+            );
+        }))}
         <NovaZTuraPopupForma isOpen={isOpenForma} setIsOpenForma={setIsOpenForma} />
         <DetaljiZavrseneTurePopup isOpen={isDetaljiOpen} handleClose={handleCloseDetalji} />
         <ConfirmBrisanje

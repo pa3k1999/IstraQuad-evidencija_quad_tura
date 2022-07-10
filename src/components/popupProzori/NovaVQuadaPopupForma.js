@@ -103,7 +103,7 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
 
   return (
     <>
-      <PopupWrap open={open} title={isUpd ? 'Azuriraj vrstu quada' : 'Dodaj vrstu quada'} handleClose={handleClose}>
+      <PopupWrap open={open} title={isUpd ? 'Ažuriraj vrstu quada' : 'Dodaj vrstu quada'} handleClose={handleClose}>
         <ValidatorForm id="vrstaQuada" onSubmit={handleDodaj}>
           <Stack alignItems="center" spacing={1}>
             <TextValidator
@@ -153,7 +153,7 @@ function NovaVQuadaPopupForma({ open, handleSetIsOpenForma }) {
                 Odustani
               </Button>
               <Button type="submit" form="vrstaQuada" variant="contained">
-                {isUpd ? 'Azuriraj' : 'Dodaj'}
+                {isUpd ? 'Ažuriraj' : 'Dodaj'}
               </Button>
             </>
           )}

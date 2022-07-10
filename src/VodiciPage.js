@@ -8,7 +8,7 @@ function VodiciPage() {
   const [isOpenForma, setIsOpenForma] = useState(false);
 
   return (
-    <TabWrap title={<Typography variant="h6">Vodici</Typography>}>
+    <TabWrap title={<Typography variant="h6">Vodiči</Typography>}>
       <VodiciLista />
       <NoviVodicPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
     </TabWrap>

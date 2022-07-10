@@ -144,6 +144,7 @@ const ListItemSt = memo(function ListItemSt({ zTura, handleOpenDetalji, handleOp
 });
 
 function ZavrseneTureLista({ zTure, handleOpenDetalji, handleOpenConfirm }) {
+
   return (
     <List style={{ padding: '0' }} dense={true}>
       {zTure.map((zT) => (

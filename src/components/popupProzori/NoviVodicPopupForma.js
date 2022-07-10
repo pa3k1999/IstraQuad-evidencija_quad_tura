@@ -85,7 +85,7 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
 
   return (
     <>
-      <PopupWrap open={open} title="Dodaj vodica" handleClose={handleClose}>
+      <PopupWrap open={open} title="Dodaj vodiča" handleClose={handleClose}>
         <ValidatorForm id="vodic" onSubmit={handleDodaj}>
           <Stack alignItems="center" spacing={1}>
             <TextValidator
@@ -111,7 +111,7 @@ function NoviVodicPopupForma({ open, handleSetIsOpenForma }) {
             />
             <TextValidator
               fullWidth={true}
-              label="Korisnicko ime"
+              label="Korisničko ime"
               color="secondary"
               style={{ width: '300px' }}
               value={iKorisnickoIme}

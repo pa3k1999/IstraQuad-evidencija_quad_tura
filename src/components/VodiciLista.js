@@ -56,7 +56,7 @@ function VodiciLista() {
         ))}
       </List>
       <ConfirmBrisanje
-        text="Brisanjem ove stavke obrisati ce se sve duge stavke koje su vezane sa ovom stavkom (zavrsene ture). Jeste li sigurni da zelite obristai ovu stavku?"
+        text="Brisanjem ove stavke obrisati će se sve duge stavke koje su vezane sa ovom stavkom (zavrsene ture). Jeste li sigurni da želite obristai ovu stavku?"
         isOpen={isConfirmDOpen}
         handleClose={() => setIsConfirmDOpen(false)}
         handleDeleteeData={() => handleDeleteeDataVodic(selectedVodici.id)}
