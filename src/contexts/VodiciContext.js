@@ -31,7 +31,7 @@ export function VodiciProvider({ children }) {
 
   const handleNewDataVodic = async (data, userData, isAdmin) => {
     await axios
-      .get('http://localhost:4000/novi-user', {
+      .get('https://istra-quad.herokuapp.com/novi-user', {
         headers: {
           email: `${userData.eMail}`,
           lozinka: `${userData.lozinka}`,
@@ -50,7 +50,7 @@ export function VodiciProvider({ children }) {
 
   const handleDeleteeDataVodic = async (id) => {
     await axios
-      .delete('http://localhost:4000/obrisi-vodica', {
+      .delete('https://istra-quad.herokuapp.com/obrisi-vodica', {
         headers: {
           uid: `${id}`,
         },
