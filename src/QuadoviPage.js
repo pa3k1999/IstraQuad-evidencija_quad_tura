@@ -5,10 +5,13 @@ import ConfirmBrisanje from './components/popupProzori/ConfirmBrisanje';
 import NoviQuadPopupForma from './components/popupProzori/NoviQuadPopupForma';
 import QuadoviLista from './components/QuadoviLista';
 import TabWrap from './components/TabWrap';
+import { GlobalContext } from './contexts/GlobalContext';
 import { QuadoviContext } from './contexts/QuadoviContext';
 
 function QuadoviPage() {
   const { selectedQuad, vrsteQuadova, quadovi, handleDeleteeDataQuad } = useContext(QuadoviContext);
+  const { userClaims } = useContext(GlobalContext);
+
 
   const [isOpenForma, setIsOpenForma] = useState(false);
   const [isConfirmDOpen, setIsConfirmDOpen] = useState(false);
@@ -45,7 +48,8 @@ function QuadoviPage() {
         handleClose={() => setIsConfirmDOpen(false)}
         handleDeleteeData={() => handleDeleteeDataQuad(selectedQuad.id)}
       />
-      <NoviQuadPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} />
+      {userClaims.admin ? <NoviQuadPopupForma open={isOpenForma} handleSetIsOpenForma={setIsOpenForma} /> : <></>}
+      
     </TabWrap>
   );
 }

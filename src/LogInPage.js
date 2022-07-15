@@ -28,8 +28,8 @@ const StyledLozinkaTextValidator = styled((props) => <TextValidator {...props} /
 }));
 
 const errors = {
-  'auth/invalid-email': 'Korisnicko ime ili lozinka je pogresna!',
-  'auth/wrong-password': 'Korisnicko ime ili lozinka je pogresna!',
+  'auth/invalid-email': 'Korisničko ime ili lozinka je pogrešna!',
+  'auth/wrong-password': 'Korisničko ime ili lozinka je pogrešna!',
 };
 
 export default function LogInPage() {

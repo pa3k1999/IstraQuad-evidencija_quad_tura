@@ -21,10 +21,6 @@ import QuadInfoPage from './QuadInfoPage';
 import StatistikaPage from './StatistikaPage';
 import HomePage from './HomePage';
 
-//TODO: napraviti pregled profila i uredjivanje podataka
-//      loading za dodavanje zTura
-//      home page
-
 const StyledPaper = styled((props) => <Paper {...props} />)(({ theme }) => ({
   overflowY: 'scroll',
   MsOverflowStyle: 'none',
@@ -60,7 +56,7 @@ function App() {
         </ElevationScroll>
         <StyledPaper elevation={0} style={{ height: '100vh', display: 'flex', flexFlow: 'column' }}>
           <Toolbar sx={{ marginBottom: 3, flex: '0 1 auto' }} />
-          <div style={{ flex: '1 1 auto' }}>
+          <div style={{ flex: '1 1 auto', paddingBottom: '80px'}}>
             <Routes>
               <Route exact path="/" element={<HomePage />} />
               <Route

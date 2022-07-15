@@ -140,7 +140,7 @@ function NavBar() {
                     <ListItemIcon>
                       <LogoutIcon sx={{ color: 'primary.contrastText' }} />
                     </ListItemIcon>
-                    <ListItemText primary="LogOut" />
+                    <ListItemText primary="Odjavite se" />
                   </ListItemButton>
                 </ListItem>
               </>
